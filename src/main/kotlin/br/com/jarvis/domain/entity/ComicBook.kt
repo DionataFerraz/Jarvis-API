@@ -13,27 +13,42 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.OneToMany
 import javax.persistence.Table
-import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.NotNull
 
 @Entity
 @Table(name = "comic_book")
-data class ComicBook(
+class ComicBook {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "id", unique = true, nullable = false)
-    val id: UUID,
+    var id: Long? = null
 
-    @Column(name = "comic_type", length = 100, nullable = false)
+    @Column(name = "comic_type", nullable = false)
     @Enumerated(EnumType.STRING)
-    @NotEmpty(message = "Comic type field is required.")
-    val comicType: ComicType,
+    @NotNull(message = "Comic type field is required.")
+    lateinit var comicType: ComicType
 
     @Column(name = "has_animation", nullable = false)
-    @NotEmpty(message = "Comic has animation field is required.")
-    val hasAnimation: Boolean = false,
+    @NotNull(message = "Comic has animation field is required.")
+    var hasAnimation: Boolean = false
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY, orphanRemoval = false)
-    val comicBooks: Set<ComicBookLocale> = emptySet()
-)
+    @OneToMany(mappedBy = "comicBook", fetch = FetchType.LAZY, orphanRemoval = false, targetEntity = ComicBookLocale::class)
+    var locales: Set<ComicBookLocale> = emptySet()
+
+    constructor() {}
+
+    constructor(comicType: ComicType, hasAnimation: Boolean, comicBooks: Set<ComicBookLocale> = emptySet()) {
+        this.comicType = comicType
+        this.hasAnimation = hasAnimation
+        this.locales = comicBooks
+    }
+
+    override fun toString(): String {
+        return "ComicBook(" +
+                "   id = $id," +
+                "   comicType = $comicType," +
+                "   hasAnimation = $hasAnimation," +
+                "   locales = $locales," +
+                ")"
+    }
+}

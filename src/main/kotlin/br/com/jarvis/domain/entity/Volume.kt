@@ -22,9 +22,11 @@ data class Volume(
     @Column(name = "id", unique = true, nullable = false)
     val id: UUID,
 
+/*
     @ManyToOne
     @JoinColumn(name = "id_comic_book_locale", referencedColumnName = "id")
     val comicBookLocale: ComicBookLocale,
+*/
 
     @Column(name = "release_date", nullable = false)
     @NotEmpty(message = "Volume release date field is required.")
