@@ -6,6 +6,7 @@ import br.com.jarvis.domain.entity.ComicType
 import br.com.jarvis.domain.mapper.ComicBookDTOToComicBookLocaleMapper
 import br.com.jarvis.domain.repository.ComicBookLocaleRepository
 import br.com.jarvis.domain.repository.ComicBookRepository
+import br.com.jarvis.exception.ComicBookExistsException
 import br.com.jarvis.rest.controller.dto.ComicBookDTO
 import br.com.jarvis.service.ComicBookService
 import org.springframework.stereotype.Service
@@ -20,12 +21,16 @@ open class ComicBookServiceImpl(
 
     @Transactional
     override fun save(dto: ComicBookDTO) {
-        val comicBook = comicBookLocaleRepository.findByName(dto.name).firstOrNull()?.comicBook
+        val comicBookLocale = comicBookLocaleRepository.findByName(dto.name).firstOrNull()
+        val comicBook = comicBookLocale?.comicBook
 
         if (comicBook != null) {
-            comicBookLocaleRepository.save(
-                mapper.mapFrom(dto, comicBook)
-            )
+            if (comicBookLocale.language == dto.language && comicBookLocale.name == dto.name){
+                throw ComicBookExistsException
+            }
+
+            val newComicBookLocale= mapper.mapFrom(dto, comicBook)
+            comicBookLocaleRepository.save(newComicBookLocale)
         } else {
             val newComicBook = ComicBook(
                 comicType = ComicType.valueOf(dto.comicType),
@@ -40,7 +45,6 @@ open class ComicBookServiceImpl(
             )
         }
     }
-
 
     @Transactional
     override fun fetchAllComics(language: String?): List<ComicBookDTO> {

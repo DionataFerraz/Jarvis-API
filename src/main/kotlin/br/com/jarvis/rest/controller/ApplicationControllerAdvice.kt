@@ -1,6 +1,7 @@
 package br.com.jarvis.rest.controller
 
 import br.com.jarvis.exception.BusinessRuleException
+import br.com.jarvis.exception.ComicBookExistsException
 import br.com.jarvis.exception.ComicBookNotFoundException
 import br.com.jarvis.rest.ApiErrors
 import org.springframework.http.HttpStatus
@@ -22,7 +23,13 @@ class ApplicationControllerAdvice {
 
     @ExceptionHandler(ComicBookNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleOrderNotFoundException(exception: ComicBookNotFoundException): ApiErrors {
+    fun handleComicBookNotFoundException(exception: ComicBookNotFoundException): ApiErrors {
+        return ApiErrors(exception.message.orEmpty())
+    }
+
+    @ExceptionHandler(ComicBookExistsException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleComicBookExistsException(exception: ComicBookExistsException): ApiErrors {
         return ApiErrors(exception.message.orEmpty())
     }
 
