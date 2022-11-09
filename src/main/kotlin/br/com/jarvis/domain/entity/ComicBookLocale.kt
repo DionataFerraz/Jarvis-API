@@ -14,7 +14,6 @@ import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.Table
 import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.NotNull
 
 @Entity
 @Table(name = "comic_book_locale")
@@ -31,23 +30,18 @@ class ComicBookLocale {
 
     @Column(name = "name", length = 50, nullable = false)
     @NotEmpty(message = "Comic book locale name field is required.")
-    var name: String? = null
+    lateinit var name: String
 
     @Column(name = "description", length = 100, nullable = false)
     @NotEmpty(message = "Comic book locale description field is required.")
-    var description: String? = null
+    lateinit var description: String
 
-    @Column(name = "language", unique = true, nullable = false)
+    @Column(name = "alternative_name", length = 50)
+    var alternativeName: String? = null
+
+    @Column(name = "language", nullable = false)
     @NotEmpty(message = "Comic book language field is required.")
     lateinit var language: String
-
-    @Column(name = "release_date", nullable = false)
-    @NotNull(message = "Comic book locale release date field is required.")
-    lateinit var releaseDate: LocalDate
-
-    @Column(name = "completion_date")
-    @JsonIgnore
-    var completionDate: LocalDate? = null
 
 //    @JsonIgnore
 //    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY, orphanRemoval = false)
@@ -61,15 +55,13 @@ class ComicBookLocale {
         comicBook: ComicBook,
         description: String,
         language: String,
-        releaseDate: LocalDate,
-        completionDate: LocalDate? = null
+        alternativeName: String? = null
     ) {
         this.name = name
         this.description = description
         this.comicBook = comicBook
         this.language = language
-        this.releaseDate = releaseDate
-        this.completionDate = completionDate
+        this.alternativeName = alternativeName
     }
 
     override fun toString(): String {
@@ -78,8 +70,6 @@ class ComicBookLocale {
                 "   name = $name," +
                 "   description = $description," +
                 "   locale = ${language}," +
-                "   releaseDate = $releaseDate," +
-                "   completionDate = $completionDate," +
 //                "   volumes = $volumes," +
                 ")"
     }
