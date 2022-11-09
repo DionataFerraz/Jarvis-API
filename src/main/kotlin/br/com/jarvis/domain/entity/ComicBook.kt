@@ -2,7 +2,9 @@ package br.com.jarvis.domain.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.hibernate.annotations.GenericGenerator
+import java.time.LocalDate
 import java.util.UUID
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
@@ -32,15 +34,31 @@ class ComicBook {
     @NotNull(message = "Comic has animation field is required.")
     var hasAnimation: Boolean = false
 
-    @OneToMany(mappedBy = "comicBook", fetch = FetchType.LAZY, orphanRemoval = false, targetEntity = ComicBookLocale::class)
+    @OneToMany(mappedBy = "comicBook", fetch = FetchType.LAZY, orphanRemoval = false, targetEntity = ComicBookLocale::class, cascade = [CascadeType.ALL])
     var locales: Set<ComicBookLocale> = emptySet()
+
+    @Column(name = "release_date", nullable = false)
+    @NotNull(message = "Comic book locale release date field is required.")
+    lateinit var releaseDate: LocalDate
+
+    @Column(name = "completion_date")
+    @JsonIgnore
+    var completionDate: LocalDate? = null
 
     constructor() {}
 
-    constructor(comicType: ComicType, hasAnimation: Boolean, comicBooks: Set<ComicBookLocale> = emptySet()) {
+    constructor(
+        comicType: ComicType,
+        hasAnimation: Boolean,
+        locales: Set<ComicBookLocale> = emptySet(),
+        releaseDate: LocalDate,
+        completionDate: LocalDate? = null
+    ) {
         this.comicType = comicType
         this.hasAnimation = hasAnimation
-        this.locales = comicBooks
+        this.locales = locales
+        this.releaseDate = releaseDate
+        this.completionDate = completionDate
     }
 
     override fun toString(): String {
@@ -48,6 +66,8 @@ class ComicBook {
                 "   id = $id," +
                 "   comicType = $comicType," +
                 "   hasAnimation = $hasAnimation," +
+                "   releaseDate = $releaseDate," +
+                "   completionDate = $completionDate," +
                 "   locales = $locales," +
                 ")"
     }
