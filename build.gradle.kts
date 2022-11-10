@@ -3,15 +3,15 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.7.0"
     application
-    kotlin("kapt") version "1.6.21"
-    kotlin("plugin.allopen") version "1.6.21"
+//    kotlin("kapt") version "1.6.21"
+//    kotlin("plugin.allopen") version "1.6.21"
 }
 
-allOpen {
+/*allOpen {
     annotation("javax.persistence.Entity")
     annotation("javax.persistence.Embeddable")
     annotation("javax.persistence.MappedSuperclass")
-}
+}*/
 
 group = "br.com.jarvis"
 version = "1.0-SNAPSHOT"
@@ -31,14 +31,14 @@ dependencies {
     runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:1.7.0")
     implementation("com.h2database:h2:2.1.214")
     implementation("org.springframework.boot:spring-boot-maven-plugin:2.7.1")
-
+/*
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-mustache:2.7.3")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    runtimeOnly("com.h2database:h2")
+    runtimeOnly("com.h2database:h2")*/
 }
 
 tasks.test {

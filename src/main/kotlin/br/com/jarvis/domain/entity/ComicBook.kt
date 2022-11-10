@@ -1,9 +1,7 @@
 package br.com.jarvis.domain.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import org.hibernate.annotations.GenericGenerator
 import java.time.LocalDate
-import java.util.UUID
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -34,7 +32,13 @@ class ComicBook {
     @NotNull(message = "Comic has animation field is required.")
     var hasAnimation: Boolean = false
 
-    @OneToMany(mappedBy = "comicBook", fetch = FetchType.LAZY, orphanRemoval = false, targetEntity = ComicBookLocale::class, cascade = [CascadeType.ALL])
+    @OneToMany(
+        mappedBy = "comicBook",
+        fetch = FetchType.LAZY,
+        orphanRemoval = false,
+        targetEntity = ComicBookLocale::class,
+        cascade = [CascadeType.ALL]
+    )
     var locales: Set<ComicBookLocale> = emptySet()
 
     @Column(name = "release_date", nullable = false)

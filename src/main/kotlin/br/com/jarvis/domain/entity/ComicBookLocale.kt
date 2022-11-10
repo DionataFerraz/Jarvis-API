@@ -1,9 +1,7 @@
 package br.com.jarvis.domain.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import java.time.LocalDate
-import java.util.*
-import javax.persistence.Basic
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
@@ -12,6 +10,7 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
 import javax.persistence.Table
 import javax.validation.constraints.NotEmpty
 
@@ -43,9 +42,15 @@ class ComicBookLocale {
     @NotEmpty(message = "Comic book language field is required.")
     lateinit var language: String
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY, orphanRemoval = false)
-//    var volumes: Set<Volume> = emptySet()
+    @JsonIgnore
+    @OneToMany(
+        mappedBy = "locales",
+        fetch = FetchType.LAZY,
+        orphanRemoval = false,
+        targetEntity = Volume::class,
+        cascade = [CascadeType.ALL]
+    )
+    var volumes: Set<Volume> = emptySet()
 
 
     constructor() {}
@@ -70,7 +75,7 @@ class ComicBookLocale {
                 "   name = $name," +
                 "   description = $description," +
                 "   locale = ${language}," +
-//                "   volumes = $volumes," +
+                "   volumes = $volumes," +
                 ")"
     }
 
