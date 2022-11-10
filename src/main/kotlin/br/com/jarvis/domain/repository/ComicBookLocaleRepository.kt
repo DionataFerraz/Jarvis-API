@@ -9,4 +9,3 @@ interface ComicBookLocaleRepository : JpaRepository<ComicBookLocale, Long> {
 
     fun findByName(name: String?): Set<ComicBookLocale>
 }
-

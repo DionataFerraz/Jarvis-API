@@ -9,7 +9,9 @@ import br.com.jarvis.domain.repository.ComicBookLocaleRepository
 import br.com.jarvis.domain.repository.ComicBookRepository
 import br.com.jarvis.domain.repository.VolumeRepository
 import br.com.jarvis.exception.ComicBookExistsException
+import br.com.jarvis.exception.ComicBookNotFoundException
 import br.com.jarvis.rest.controller.dto.ComicBookDTO
+import br.com.jarvis.rest.controller.dto.VolumeDTO
 import br.com.jarvis.service.ComicBookService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
