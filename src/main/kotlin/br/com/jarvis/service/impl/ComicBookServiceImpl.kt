@@ -1,11 +1,13 @@
 package br.com.jarvis.service.impl
 
+import br.com.jarvis.domain.entity.BookCoverType
 import br.com.jarvis.domain.entity.ComicBook
-import br.com.jarvis.domain.entity.ComicBookLocale
 import br.com.jarvis.domain.entity.ComicType
+import br.com.jarvis.domain.entity.Volume
 import br.com.jarvis.domain.mapper.ComicBookDTOToComicBookLocaleMapper
 import br.com.jarvis.domain.repository.ComicBookLocaleRepository
 import br.com.jarvis.domain.repository.ComicBookRepository
+import br.com.jarvis.domain.repository.VolumeRepository
 import br.com.jarvis.exception.ComicBookExistsException
 import br.com.jarvis.rest.controller.dto.ComicBookDTO
 import br.com.jarvis.service.ComicBookService
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 open class ComicBookServiceImpl(
     private val repository: ComicBookRepository,
     private val comicBookLocaleRepository: ComicBookLocaleRepository,
+    private val volumeRepository: VolumeRepository,
     private val mapper: ComicBookDTOToComicBookLocaleMapper
 ) : ComicBookService {
 
@@ -25,11 +28,11 @@ open class ComicBookServiceImpl(
         val comicBook = comicBookLocale?.comicBook
 
         if (comicBook != null) {
-            if (comicBookLocale.language == dto.language && comicBookLocale.name == dto.name){
+            if (comicBookLocale.language == dto.language && comicBookLocale.name == dto.name) {
                 throw ComicBookExistsException
             }
 
-            val newComicBookLocale= mapper.mapFrom(dto, comicBook)
+            val newComicBookLocale = mapper.mapFrom(dto, comicBook)
             comicBookLocaleRepository.save(newComicBookLocale)
         } else {
             val newComicBook = ComicBook(
@@ -40,9 +43,23 @@ open class ComicBookServiceImpl(
             )
             repository.save(newComicBook)
 
-            comicBookLocaleRepository.save(
-                mapper.mapFrom(dto, newComicBook)
-            )
+            val newComicBookLocale = mapper.mapFrom(dto, newComicBook)
+            comicBookLocaleRepository.save(newComicBookLocale)
+
+            val listVolume = dto.volumes?.map { volumeDTO ->
+                Volume(
+                    releaseYear = volumeDTO.releaseYear,
+                    number = volumeDTO.number,
+                    description = volumeDTO.description,
+                    isbn = volumeDTO.isbn,
+                    pages = volumeDTO.pages,
+                    bookCoverType = BookCoverType.valueOf(volumeDTO.bookCoverType),
+                    locales = newComicBookLocale,
+                )
+            }
+            if (listVolume != null) {
+                volumeRepository.saveAll(listVolume)
+            }
         }
     }
 
