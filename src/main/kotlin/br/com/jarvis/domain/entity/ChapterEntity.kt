@@ -1,15 +1,18 @@
 package br.com.jarvis.domain.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
 import javax.persistence.Table
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
@@ -22,6 +25,16 @@ class ChapterEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
     var id: Long? = null
+
+    @JsonIgnore
+    @OneToMany(
+        mappedBy = "chapter",
+        fetch = FetchType.LAZY,
+        orphanRemoval = false,
+        targetEntity = ImageEntity::class,
+        cascade = [CascadeType.ALL]
+    )
+    var images: Set<ImageEntity> = emptySet()
 
     @JsonIgnore
     @ManyToOne

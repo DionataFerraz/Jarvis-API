@@ -26,7 +26,6 @@ class Volume {
     @Column(name = "id", unique = true, nullable = false)
     var id: Long? = null
 
-    @JsonIgnore
     @OneToMany(
         mappedBy = "locale",
         fetch = FetchType.LAZY,
@@ -35,6 +34,15 @@ class Volume {
         cascade = [CascadeType.ALL]
     )
     var chapters: Set<ChapterEntity> = emptySet()
+
+    @OneToMany(
+        mappedBy = "volume",
+        fetch = FetchType.LAZY,
+        orphanRemoval = false,
+        targetEntity = ImageEntity::class,
+        cascade = [CascadeType.ALL]
+    )
+    var images: Set<ImageEntity> = emptySet()
 
     @JsonIgnore
     @ManyToOne
