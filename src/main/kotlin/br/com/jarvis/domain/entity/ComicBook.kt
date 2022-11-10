@@ -41,6 +41,15 @@ class ComicBook {
     )
     var author:  Set<AuthorEntity> = emptySet()
 
+    @OneToMany(
+        mappedBy = "comicBook",
+        fetch = FetchType.LAZY,
+        orphanRemoval = false,
+        targetEntity = AnimationEntity::class,
+        cascade = [CascadeType.ALL]
+    )
+    var animation:  Set<AnimationEntity> = emptySet()
+
     @Column(name = "comic_type", nullable = false)
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Comic type field is required.")
