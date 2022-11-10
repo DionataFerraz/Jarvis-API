@@ -1,25 +1,22 @@
 package br.com.jarvis.domain.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
-import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
-import javax.persistence.OneToMany
 import javax.persistence.Table
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 
 @Entity
-@Table(name = "volume")
-class Volume {
+@Table(name = "chapter")
+class ChapterEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,67 +24,61 @@ class Volume {
     var id: Long? = null
 
     @JsonIgnore
-    @OneToMany(
-        mappedBy = "locale",
-        fetch = FetchType.LAZY,
-        orphanRemoval = false,
-        targetEntity = ChapterEntity::class,
-        cascade = [CascadeType.ALL]
-    )
-    var chapters: Set<ChapterEntity> = emptySet()
-
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_comic_book_locale", referencedColumnName = "id")
     var locale: ComicBookLocale? = null
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "id_volume", referencedColumnName = "id")
+    var volume: Volume? = null
+
     @Column(name = "release_year", nullable = false)
-    @NotEmpty(message = "Volume release year field is required.")
+    @NotEmpty(message = "Chapter release year field is required.")
     lateinit var releaseYear: String
 
-    @Column(name = "volume_number", nullable = false)
-    @NotNull(message = "Volume number field is required.")
+    @Column(name = "chapter_number", nullable = false)
+    @NotNull(message = "Chapter number field is required.")
     var number: Int = 0
 
-    @Column(name = "description", length = 1000, nullable = false)
-    @NotEmpty(message = "Volume description field is required.")
-    lateinit var description: String
+    @Column(name = "title", length = 100, nullable = false)
+    @NotEmpty(message = "Chapter title field is required.")
+    lateinit var title: String
 
-    @Column(name = "isbn", unique = true, nullable = false)
-    @NotNull(message = "Volume isbn field is required.")
-    var isbn: Long = 0
+    @Column(name = "isbn", unique = true)
+    var isbn: Long? = null
 
-    @Column(name = "pages", nullable = false)
-    @NotNull(message = "Volume pages field is required.")
-    var pages: Int = 0
+    @Column(name = "pages")
+    var pages: Int? = null
 
-    @Column(name = "book_cover_type", nullable = false)
+    @Column(name = "book_cover_type")
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "Comic type field is required.")
-    lateinit var bookCoverType: BookCoverType
+    var bookCoverType: BookCoverType? = null
 
     constructor() {}
 
     constructor(
         releaseYear: String,
         number: Int,
-        description: String,
-        isbn: Long,
-        pages: Int,
-        bookCoverType: BookCoverType,
+        title: String,
+        isbn: Long? = null,
+        pages: Int? = null,
+        bookCoverType: BookCoverType? = null,
         locale: ComicBookLocale? = null,
+        volume: Volume? = null,
     ) {
         this.releaseYear = releaseYear
         this.number = number
-        this.description = description
+        this.title = title
         this.isbn = isbn
         this.pages = pages
         this.bookCoverType = bookCoverType
         this.locale = locale
+        this.volume = volume
     }
 
     override fun toString(): String {
-        return "Volume(" +
+        return "ChapterEntity(" +
                 "   releaseYear = $releaseYear," +
                 "   number = $number," +
                 "   isbn = $isbn," +
