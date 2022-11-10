@@ -54,7 +54,7 @@ open class ComicBookServiceImpl(
                     isbn = volumeDTO.isbn,
                     pages = volumeDTO.pages,
                     bookCoverType = BookCoverType.valueOf(volumeDTO.bookCoverType),
-                    locales = newComicBookLocale,
+                    locale = newComicBookLocale,
                 )
             }
             if (listVolume != null) {

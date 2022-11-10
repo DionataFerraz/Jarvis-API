@@ -23,6 +23,26 @@ class ComicBookLocale {
     var id: Long? = null
 
     @JsonIgnore
+    @OneToMany(
+        mappedBy = "locale",
+        fetch = FetchType.LAZY,
+        orphanRemoval = false,
+        targetEntity = Volume::class,
+        cascade = [CascadeType.ALL]
+    )
+    var volumes: Set<Volume> = emptySet()
+
+    @JsonIgnore
+    @OneToMany(
+        mappedBy = "locale",
+        fetch = FetchType.LAZY,
+        orphanRemoval = false,
+        targetEntity = ChapterEntity::class,
+        cascade = [CascadeType.ALL]
+    )
+    var chapters: Set<ChapterEntity> = emptySet()
+
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_comic_book", referencedColumnName = "id")
     var comicBook: ComicBook? = null
@@ -41,17 +61,6 @@ class ComicBookLocale {
     @Column(name = "language", nullable = false)
     @NotEmpty(message = "Comic book language field is required.")
     lateinit var language: String
-
-    @JsonIgnore
-    @OneToMany(
-        mappedBy = "locales",
-        fetch = FetchType.LAZY,
-        orphanRemoval = false,
-        targetEntity = Volume::class,
-        cascade = [CascadeType.ALL]
-    )
-    var volumes: Set<Volume> = emptySet()
-
 
     constructor() {}
 
