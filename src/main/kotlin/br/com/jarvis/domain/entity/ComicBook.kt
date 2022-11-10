@@ -23,15 +23,6 @@ class ComicBook {
     @Column(name = "id", unique = true, nullable = false)
     var id: Long? = null
 
-    @Column(name = "comic_type", nullable = false)
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "Comic type field is required.")
-    lateinit var comicType: ComicType
-
-    @Column(name = "has_animation", nullable = false)
-    @NotNull(message = "Comic has animation field is required.")
-    var hasAnimation: Boolean = false
-
     @OneToMany(
         mappedBy = "comicBook",
         fetch = FetchType.LAZY,
@@ -40,6 +31,24 @@ class ComicBook {
         cascade = [CascadeType.ALL]
     )
     var locales: Set<ComicBookLocale> = emptySet()
+
+    @OneToMany(
+        mappedBy = "comicBook",
+        fetch = FetchType.LAZY,
+        orphanRemoval = false,
+        targetEntity = AuthorEntity::class,
+        cascade = [CascadeType.ALL]
+    )
+    var author:  Set<AuthorEntity> = emptySet()
+
+    @Column(name = "comic_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "Comic type field is required.")
+    lateinit var comicType: ComicType
+
+    @Column(name = "has_animation", nullable = false)
+    @NotNull(message = "Comic has animation field is required.")
+    var hasAnimation: Boolean = false
 
     @Column(name = "release_date", nullable = false)
     @NotNull(message = "Comic book locale release date field is required.")
