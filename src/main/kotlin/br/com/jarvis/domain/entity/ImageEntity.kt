@@ -14,55 +14,63 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
 import javax.persistence.Table
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 
 @Entity
-@Table(name = "author")
-class AuthorEntity {
+@Table(name = "image")
+class ImageEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
     var id: Long? = null
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_comic_book", referencedColumnName = "id")
     var comicBook: ComicBook? = null
 
-    @Column(name = "birthday", nullable = false)
-    @NotNull(message = "Author birthday field is required.")
-    lateinit var birthday: Date
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "id_volume", referencedColumnName = "id")
+    var volume: Volume? = null
 
-    @Column(name = "synopsis", length = 500, nullable = false)
-    @NotEmpty(message = "Author synopsis field is required.")
-    lateinit var synopsis: String
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "id_chapter", referencedColumnName = "id")
+    var chapter: ChapterEntity? = null
 
     @Column(name = "image_path", length = 500, nullable = false)
-    @NotEmpty(message = "Author imagePath field is required.")
+    @NotEmpty(message = "Image imagePath field is required.")
     lateinit var imagePath: String
+
+    @Column(name = "description", length = 100, nullable = false)
+    @NotEmpty(message = "Image description field is required.")
+    lateinit var description: String
 
     constructor() {}
 
     constructor(
+        imagePath: String,
+        description: String,
         comicBook: ComicBook? = null,
-        birthday: Date,
-        synopsis: String,
-        imagePath: String
+        chapter: ChapterEntity? = null,
+        volume: Volume? = null,
     ) {
-        this.comicBook = comicBook
-        this.birthday = birthday
-        this.synopsis = synopsis
         this.imagePath = imagePath
+        this.description = description
+        this.comicBook = comicBook
+        this.chapter = chapter
+        this.volume = volume
     }
 
     override fun toString(): String {
-        return "AuthorEntity(" +
-                "   id = $id," +
-                "   birthday = $birthday," +
-                "   synopsis = $synopsis," +
+        return "ImageEntity(" +
                 "   imagePath = $imagePath," +
+                "   description = $description," +
                 ")"
     }
 }
