@@ -3,12 +3,15 @@ package br.com.jarvis.service.impl
 import br.com.jarvis.domain.entity.BookCoverType
 import br.com.jarvis.domain.entity.ComicBook
 import br.com.jarvis.domain.entity.ComicType
+import br.com.jarvis.domain.entity.ImageEntity
 import br.com.jarvis.domain.entity.Volume
 import br.com.jarvis.domain.mapper.ComicBookDTOToComicBookLocaleMapper
 import br.com.jarvis.domain.repository.ComicBookLocaleRepository
 import br.com.jarvis.domain.repository.ComicBookRepository
+import br.com.jarvis.domain.repository.ImageRepository
 import br.com.jarvis.domain.repository.VolumeRepository
 import br.com.jarvis.exception.ComicBookExistsException
+import br.com.jarvis.exception.ComicBookNeedsImageTypeException
 import br.com.jarvis.exception.ComicBookNotFoundException
 import br.com.jarvis.rest.controller.dto.ComicBookDTO
 import br.com.jarvis.rest.controller.dto.VolumeDTO
@@ -21,6 +24,7 @@ open class ComicBookServiceImpl(
     private val repository: ComicBookRepository,
     private val comicBookLocaleRepository: ComicBookLocaleRepository,
     private val volumeRepository: VolumeRepository,
+    private val imageRepository: ImageRepository,
     private val mapper: ComicBookDTOToComicBookLocaleMapper
 ) : ComicBookService {
 
@@ -39,6 +43,7 @@ open class ComicBookServiceImpl(
         } else {
             val newComicBook = ComicBook(
                 comicType = ComicType.valueOf(dto.comicType),
+                imagePath = dto.imagePath,
                 hasAnimation = dto.hasAnimation,
                 releaseDate = dto.releaseDate,
                 completionDate = dto.completionDate,
@@ -49,7 +54,7 @@ open class ComicBookServiceImpl(
             comicBookLocaleRepository.save(newComicBookLocale)
 
             val listVolume = dto.volumes?.map { volumeDTO ->
-                Volume(
+                val newVolume = Volume(
                     releaseYear = volumeDTO.releaseYear,
                     number = volumeDTO.number,
                     description = volumeDTO.description,
@@ -58,6 +63,31 @@ open class ComicBookServiceImpl(
                     bookCoverType = BookCoverType.valueOf(volumeDTO.bookCoverType),
                     locale = newComicBookLocale,
                 )
+
+                imageRepository.saveAll(
+                    volumeDTO.images?.map {
+                        ImageEntity(
+                            imagePath = it.image,
+                            description = it.description,
+                            volume = newVolume
+                        )
+                    } ?: listOf(
+                        if (dto.imageType == null) {
+                            throw ComicBookNeedsImageTypeException
+                        } else {
+                            ImageEntity(
+                                imagePath = dto.name
+                                    .lowercase()
+                                    .replace(" ", "")
+                                    .plus("_${volumeDTO.number}")
+                                    .plus(dto.imageType),
+                                volume = newVolume
+                            )
+                        }
+                    )
+                )
+
+                newVolume
             }
             if (listVolume != null) {
                 volumeRepository.saveAll(listVolume)
@@ -77,6 +107,7 @@ open class ComicBookServiceImpl(
 
             ComicBookDTO(
                 comicType = comicBook.comicType.name,
+                imagePath = comicBook.imagePath,
                 hasAnimation = comicBook.hasAnimation,
                 releaseDate = comicBook.releaseDate,
                 completionDate = comicBook.completionDate,

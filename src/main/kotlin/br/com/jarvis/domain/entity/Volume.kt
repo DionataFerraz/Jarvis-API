@@ -84,6 +84,7 @@ class Volume {
         pages: Int,
         bookCoverType: BookCoverType,
         locale: ComicBookLocale? = null,
+        images: Set<ImageEntity> = emptySet(),
     ) {
         this.releaseYear = releaseYear
         this.number = number
@@ -92,6 +93,7 @@ class Volume {
         this.pages = pages
         this.bookCoverType = bookCoverType
         this.locale = locale
+        this.images = images
     }
 
     override fun toString(): String {

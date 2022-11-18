@@ -43,19 +43,18 @@ class ImageEntity {
     @JoinColumn(name = "id_chapter", referencedColumnName = "id")
     var chapter: ChapterEntity? = null
 
-    @Column(name = "image_path", length = 500, nullable = false)
+    @Column(name = "image_path", unique = true, length = 500, nullable = false)
     @NotEmpty(message = "Image imagePath field is required.")
     lateinit var imagePath: String
 
-    @Column(name = "description", length = 100, nullable = false)
-    @NotEmpty(message = "Image description field is required.")
-    lateinit var description: String
+    @Column(name = "description", length = 100)
+    var description: String? = null
 
     constructor() {}
 
     constructor(
         imagePath: String,
-        description: String,
+        description: String? = null,
         comicBook: ComicBook? = null,
         chapter: ChapterEntity? = null,
         volume: Volume? = null,

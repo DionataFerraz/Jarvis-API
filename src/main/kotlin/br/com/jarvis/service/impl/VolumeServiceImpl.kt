@@ -7,6 +7,7 @@ import br.com.jarvis.domain.repository.ComicBookRepository
 import br.com.jarvis.domain.repository.VolumeRepository
 import br.com.jarvis.exception.ComicBookNotFoundException
 import br.com.jarvis.rest.controller.dto.ComicBookDTO
+import br.com.jarvis.rest.controller.dto.ImageDTO
 import br.com.jarvis.rest.controller.dto.VolumeDTO
 import br.com.jarvis.service.VolumeService
 import org.springframework.stereotype.Service
@@ -49,6 +50,7 @@ open class VolumeServiceImpl(
 
             ComicBookDTO(
                 comicType = comicBook.comicType.name,
+                imagePath = comicBook.imagePath,
                 hasAnimation = comicBook.hasAnimation,
                 releaseDate = comicBook.releaseDate,
                 completionDate = comicBook.completionDate,
@@ -65,6 +67,12 @@ open class VolumeServiceImpl(
                             isbn = volumeEntity.isbn,
                             pages = volumeEntity.pages,
                             bookCoverType = volumeEntity.bookCoverType.name,
+                            images = volumeEntity.images.map { imageEntity->
+                                ImageDTO(
+                                    image = imageEntity.imagePath,
+                                    description =  imageEntity.description
+                                )
+                            }
                         )
                     }
             )
