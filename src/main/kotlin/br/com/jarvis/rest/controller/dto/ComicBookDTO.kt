@@ -20,6 +20,17 @@ data class ComicBookDTO(
     val completionDate: LocalDate? = null,
     @JsonProperty("volumes")
     val volumes: List<VolumeDTO>? = listOf(),
+    @JsonProperty("imagePath")
+    val imagePath: String,
+    @JsonProperty("imageType")
+    val imageType: String? = null,
+)
+
+data class ImageDTO(
+    @JsonProperty("image")
+    val image: String,
+    @JsonProperty("description")
+    val description: String? = null,
 )
 
 data class VolumeDTO(
@@ -35,4 +46,6 @@ data class VolumeDTO(
     val pages: Int,
     @JsonProperty("bookCoverType")
     val bookCoverType: String,
+    @JsonProperty("images")
+    val images: List<ImageDTO>? = null,
 )

@@ -13,6 +13,7 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.OneToMany
 import javax.persistence.Table
+import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 
 @Entity
@@ -64,6 +65,10 @@ class ComicBook {
     @NotNull(message = "Comic type field is required.")
     lateinit var comicType: ComicType
 
+    @Column(name = "image_path", nullable = false)
+    @NotEmpty(message = "Comic book image path field is required.")
+    lateinit var imagePath: String
+
     @Column(name = "has_animation", nullable = false)
     @NotNull(message = "Comic has animation field is required.")
     var hasAnimation: Boolean = false
@@ -80,12 +85,14 @@ class ComicBook {
 
     constructor(
         comicType: ComicType,
+        imagePath: String,
         hasAnimation: Boolean,
         locales: Set<ComicBookLocale> = emptySet(),
         releaseDate: LocalDate,
         completionDate: LocalDate? = null
     ) {
         this.comicType = comicType
+        this.imagePath = imagePath
         this.hasAnimation = hasAnimation
         this.locales = locales
         this.releaseDate = releaseDate
@@ -96,6 +103,7 @@ class ComicBook {
         return "ComicBook(" +
                 "   id = $id," +
                 "   comicType = $comicType," +
+                "   imagePath = $imagePath," +
                 "   hasAnimation = $hasAnimation," +
                 "   releaseDate = $releaseDate," +
                 "   completionDate = $completionDate," +
