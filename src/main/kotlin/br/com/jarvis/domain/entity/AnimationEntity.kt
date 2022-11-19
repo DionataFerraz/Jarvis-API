@@ -32,9 +32,16 @@ class AnimationEntity {
     @JoinColumn(name = "id_comic_book", referencedColumnName = "id")
     var comicBook: ComicBook? = null
 
+    @Column(name = "name", length = 500, nullable = false)
+    @NotEmpty(message = "Animation name field is required.")
+    lateinit var name: String
+
     @Column(name = "release_date", nullable = false)
     @NotNull(message = "Animation release date field is required.")
     lateinit var releaseDate: Date
+
+    @Column(name = "completion_date", nullable = false)
+    var completionDate: Date? = null
 
     @Column(name = "episode_qtd", nullable = false)
     @NotNull(message = "Animation episode qtd field is required.")
@@ -44,26 +51,39 @@ class AnimationEntity {
     @NotNull(message = "Animation season qtd field is required.")
     var seasonQtd: Int = 0
 
+    @Column(name = "image_path", length = 500, nullable = false)
+    @NotEmpty(message = "Animation imagePath field is required.")
+    lateinit var imagePath: String
+
     constructor() {}
 
     constructor(
         comicBook: ComicBook? = null,
+        name: String,
         releaseDate: Date,
+        completionDate: Date? = null,
         episodeQtd: Int,
-        seasonQtd: Int
+        seasonQtd: Int,
+        imagePath: String,
     ) {
+        this.name = name
         this.comicBook = comicBook
         this.releaseDate = releaseDate
+        this.completionDate = completionDate
         this.episodeQtd = episodeQtd
         this.seasonQtd = seasonQtd
+        this.imagePath = imagePath
     }
 
     override fun toString(): String {
         return "AnimationEntity(" +
                 "   id = $id," +
+                "   name = $name," +
                 "   releaseDate = $releaseDate," +
+                "   completionDate = $completionDate," +
                 "   episodeQtd = $episodeQtd," +
                 "   episodeQtd = $episodeQtd," +
+                "   imagePath = $imagePath," +
                 ")"
     }
 }

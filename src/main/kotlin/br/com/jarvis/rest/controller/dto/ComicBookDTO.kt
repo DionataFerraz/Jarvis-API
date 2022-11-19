@@ -24,6 +24,8 @@ data class ComicBookDTO(
     val imageType: String? = null,
     @JsonProperty("authors")
     val authors: List<AuthorDTO>? = null,
+    @JsonProperty("animations")
+    val animations: List<AnimationDTO>? = listOf(),
     @JsonProperty("volumes")
     val volumes: List<VolumeDTO>? = listOf(),
 )
