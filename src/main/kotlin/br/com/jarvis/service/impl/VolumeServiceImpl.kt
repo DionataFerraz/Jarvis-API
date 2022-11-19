@@ -6,6 +6,7 @@ import br.com.jarvis.domain.repository.ComicBookLocaleRepository
 import br.com.jarvis.domain.repository.ComicBookRepository
 import br.com.jarvis.domain.repository.VolumeRepository
 import br.com.jarvis.exception.ComicBookNotFoundException
+import br.com.jarvis.rest.controller.dto.AnimationDTO
 import br.com.jarvis.rest.controller.dto.AuthorDTO
 import br.com.jarvis.rest.controller.dto.ComicBookDTO
 import br.com.jarvis.rest.controller.dto.ImageDTO
@@ -58,6 +59,17 @@ open class VolumeServiceImpl(
                 )
             }
 
+            val animationDTO = comicBook.animation.map { animationEntity ->
+                AnimationDTO(
+                    name = animationEntity.name,
+                    releaseDate = animationEntity.releaseDate,
+                    completionDate = animationEntity.completionDate,
+                    episodeQtd = animationEntity.episodeQtd,
+                    seasonQtd = animationEntity.seasonQtd,
+                    imagePath = animationEntity.imagePath,
+                )
+            }
+
             ComicBookDTO(
                 comicType = comicBook.comicType.name,
                 imagePath = comicBook.imagePath,
@@ -68,6 +80,7 @@ open class VolumeServiceImpl(
                 description = locale.description,
                 language = locale.language,
                 authors = authorDTO,
+                animations = animationDTO,
                 volumes = locale.volumes
                     .sortedBy { it.number }
                     .map { volumeEntity ->

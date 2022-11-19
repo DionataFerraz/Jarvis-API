@@ -1,5 +1,6 @@
 package br.com.jarvis.service.impl
 
+import br.com.jarvis.domain.entity.AnimationEntity
 import br.com.jarvis.domain.entity.AuthorEntity
 import br.com.jarvis.domain.entity.BookCoverType
 import br.com.jarvis.domain.entity.ComicBook
@@ -7,6 +8,7 @@ import br.com.jarvis.domain.entity.ComicType
 import br.com.jarvis.domain.entity.ImageEntity
 import br.com.jarvis.domain.entity.Volume
 import br.com.jarvis.domain.mapper.ComicBookDTOToComicBookLocaleMapper
+import br.com.jarvis.domain.repository.AnimationRepository
 import br.com.jarvis.domain.repository.AuthorRepository
 import br.com.jarvis.domain.repository.ComicBookLocaleRepository
 import br.com.jarvis.domain.repository.ComicBookRepository
@@ -26,6 +28,7 @@ open class ComicBookServiceImpl(
     private val volumeRepository: VolumeRepository,
     private val imageRepository: ImageRepository,
     private val authorRepository: AuthorRepository,
+    private val animationRepository: AnimationRepository,
     private val mapper: ComicBookDTOToComicBookLocaleMapper
 ) : ComicBookService {
 
@@ -60,7 +63,19 @@ open class ComicBookServiceImpl(
                     birthday = author.birthday,
                     synopsis = author.synopsis,
                     imagePath = author.imagePath,
-                    comicBook = newComicBook
+                    comicBook = newComicBook,
+                )
+            }
+
+            val animations = dto.animations?.map { animation ->
+                AnimationEntity(
+                    name = animation.name,
+                    releaseDate = animation.releaseDate,
+                    completionDate = animation.completionDate,
+                    episodeQtd = animation.episodeQtd,
+                    seasonQtd = animation.seasonQtd,
+                    imagePath = animation.imagePath,
+                    comicBook = newComicBook,
                 )
             }
 
@@ -107,6 +122,10 @@ open class ComicBookServiceImpl(
 
             if (authors != null) {
                 authorRepository.saveAll(authors)
+            }
+
+            if (animations != null) {
+                animationRepository.saveAll(animations)
             }
         }
     }
