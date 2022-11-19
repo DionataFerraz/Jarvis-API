@@ -1,13 +1,9 @@
 package br.com.jarvis.domain.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import java.time.LocalDate
-import java.util.Date
-import javax.persistence.CascadeType
+import java.util.*
 import javax.persistence.Column
 import javax.persistence.Entity
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
 import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -26,10 +22,15 @@ class AuthorEntity {
     @Column(name = "id", unique = true, nullable = false)
     var id: Long? = null
 
+    // TODO: Preciso ajustar isso pois um author pode ter varios volumes
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_comic_book", referencedColumnName = "id")
     var comicBook: ComicBook? = null
+
+    @Column(name = "name", length = 500, nullable = false)
+    @NotEmpty(message = "Author name field is required.")
+    lateinit var name: String
 
     @Column(name = "birthday", nullable = false)
     @NotNull(message = "Author birthday field is required.")
@@ -47,10 +48,12 @@ class AuthorEntity {
 
     constructor(
         comicBook: ComicBook? = null,
+        name: String,
         birthday: Date,
         synopsis: String,
         imagePath: String
     ) {
+        this.name = name
         this.comicBook = comicBook
         this.birthday = birthday
         this.synopsis = synopsis
@@ -60,6 +63,7 @@ class AuthorEntity {
     override fun toString(): String {
         return "AuthorEntity(" +
                 "   id = $id," +
+                "   name = $name," +
                 "   birthday = $birthday," +
                 "   synopsis = $synopsis," +
                 "   imagePath = $imagePath," +

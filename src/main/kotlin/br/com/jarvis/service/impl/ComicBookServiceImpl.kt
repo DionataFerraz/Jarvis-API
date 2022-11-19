@@ -1,20 +1,20 @@
 package br.com.jarvis.service.impl
 
+import br.com.jarvis.domain.entity.AuthorEntity
 import br.com.jarvis.domain.entity.BookCoverType
 import br.com.jarvis.domain.entity.ComicBook
 import br.com.jarvis.domain.entity.ComicType
 import br.com.jarvis.domain.entity.ImageEntity
 import br.com.jarvis.domain.entity.Volume
 import br.com.jarvis.domain.mapper.ComicBookDTOToComicBookLocaleMapper
+import br.com.jarvis.domain.repository.AuthorRepository
 import br.com.jarvis.domain.repository.ComicBookLocaleRepository
 import br.com.jarvis.domain.repository.ComicBookRepository
 import br.com.jarvis.domain.repository.ImageRepository
 import br.com.jarvis.domain.repository.VolumeRepository
 import br.com.jarvis.exception.ComicBookExistsException
 import br.com.jarvis.exception.ComicBookNeedsImageTypeException
-import br.com.jarvis.exception.ComicBookNotFoundException
 import br.com.jarvis.rest.controller.dto.ComicBookDTO
-import br.com.jarvis.rest.controller.dto.VolumeDTO
 import br.com.jarvis.service.ComicBookService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -25,6 +25,7 @@ open class ComicBookServiceImpl(
     private val comicBookLocaleRepository: ComicBookLocaleRepository,
     private val volumeRepository: VolumeRepository,
     private val imageRepository: ImageRepository,
+    private val authorRepository: AuthorRepository,
     private val mapper: ComicBookDTOToComicBookLocaleMapper
 ) : ComicBookService {
 
@@ -52,6 +53,16 @@ open class ComicBookServiceImpl(
 
             val newComicBookLocale = mapper.mapFrom(dto, newComicBook)
             comicBookLocaleRepository.save(newComicBookLocale)
+
+            val authors = dto.authors?.map { author ->
+                AuthorEntity(
+                    name = author.name,
+                    birthday = author.birthday,
+                    synopsis = author.synopsis,
+                    imagePath = author.imagePath,
+                    comicBook = newComicBook
+                )
+            }
 
             val listVolume = dto.volumes?.map { volumeDTO ->
                 val newVolume = Volume(
@@ -89,8 +100,13 @@ open class ComicBookServiceImpl(
 
                 newVolume
             }
+
             if (listVolume != null) {
                 volumeRepository.saveAll(listVolume)
+            }
+
+            if (authors != null) {
+                authorRepository.saveAll(authors)
             }
         }
     }

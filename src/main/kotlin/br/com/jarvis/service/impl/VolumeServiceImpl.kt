@@ -6,6 +6,7 @@ import br.com.jarvis.domain.repository.ComicBookLocaleRepository
 import br.com.jarvis.domain.repository.ComicBookRepository
 import br.com.jarvis.domain.repository.VolumeRepository
 import br.com.jarvis.exception.ComicBookNotFoundException
+import br.com.jarvis.rest.controller.dto.AuthorDTO
 import br.com.jarvis.rest.controller.dto.ComicBookDTO
 import br.com.jarvis.rest.controller.dto.ImageDTO
 import br.com.jarvis.rest.controller.dto.VolumeDTO
@@ -48,6 +49,15 @@ open class VolumeServiceImpl(
                 it.language == language
             }
 
+            val authorDTO = comicBook.author.map { authorEntity ->
+                AuthorDTO(
+                    name = authorEntity.name,
+                    synopsis = authorEntity.synopsis,
+                    birthday = authorEntity.birthday,
+                    imagePath = authorEntity.imagePath,
+                )
+            }
+
             ComicBookDTO(
                 comicType = comicBook.comicType.name,
                 imagePath = comicBook.imagePath,
@@ -57,6 +67,7 @@ open class VolumeServiceImpl(
                 name = locale.name,
                 description = locale.description,
                 language = locale.language,
+                authors = authorDTO,
                 volumes = locale.volumes
                     .sortedBy { it.number }
                     .map { volumeEntity ->
@@ -67,10 +78,10 @@ open class VolumeServiceImpl(
                             isbn = volumeEntity.isbn,
                             pages = volumeEntity.pages,
                             bookCoverType = volumeEntity.bookCoverType.name,
-                            images = volumeEntity.images.map { imageEntity->
+                            images = volumeEntity.images.map { imageEntity ->
                                 ImageDTO(
                                     image = imageEntity.imagePath,
-                                    description =  imageEntity.description
+                                    description = imageEntity.description
                                 )
                             }
                         )

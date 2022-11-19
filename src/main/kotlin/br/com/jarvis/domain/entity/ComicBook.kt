@@ -33,6 +33,7 @@ class ComicBook {
     )
     var locales: Set<ComicBookLocale> = emptySet()
 
+    // TODO: Preciso ajustar isso pois um author pode ter varios volumes
     @OneToMany(
         mappedBy = "comicBook",
         fetch = FetchType.LAZY,
