@@ -1,18 +1,18 @@
 package br.com.jarvis.domain.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.OneToMany
-import javax.persistence.Table
-import javax.validation.constraints.NotEmpty
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
+import jakarta.persistence.Table
+import jakarta.validation.constraints.NotEmpty
 
 @Entity
 @Table(name = "comic_book_locale")
@@ -27,10 +27,10 @@ class ComicBookLocale {
         mappedBy = "locale",
         fetch = FetchType.LAZY,
         orphanRemoval = false,
-        targetEntity = Volume::class,
+        targetEntity = VolumeEntity::class,
         cascade = [CascadeType.ALL]
     )
-    var volumes: Set<Volume> = emptySet()
+    var volumes: Set<VolumeEntity> = emptySet()
 
     @JsonIgnore
     @OneToMany(
@@ -45,7 +45,7 @@ class ComicBookLocale {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_comic_book", referencedColumnName = "id")
-    var comicBook: ComicBook? = null
+    var comicBook: ComicBookEntity? = null
 
     @Column(name = "name", length = 50, nullable = false)
     @NotEmpty(message = "Comic book locale name field is required.")
@@ -66,7 +66,7 @@ class ComicBookLocale {
 
     constructor(
         name: String,
-        comicBook: ComicBook,
+        comicBook: ComicBookEntity,
         description: String,
         language: String,
         alternativeName: String? = null

@@ -8,7 +8,7 @@ data class AuthorDTO(
     @JsonProperty("name")
     val name: String,
     @JsonProperty("birthday")
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     val birthday: Date,
     @JsonProperty("synopsis")
     val synopsis: String,

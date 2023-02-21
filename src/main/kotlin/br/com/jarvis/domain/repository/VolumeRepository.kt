@@ -1,7 +1,9 @@
 package br.com.jarvis.domain.repository
 
-import br.com.jarvis.domain.entity.Volume
+import br.com.jarvis.domain.entity.VolumeEntity
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
 
-interface VolumeRepository : JpaRepository<Volume, Long>
+@Repository
+interface VolumeRepository : JpaRepository<VolumeEntity, Long>
 
