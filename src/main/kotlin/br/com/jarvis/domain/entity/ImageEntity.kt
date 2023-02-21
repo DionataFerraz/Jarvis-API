@@ -1,23 +1,15 @@
 package br.com.jarvis.domain.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import java.time.LocalDate
-import java.util.Date
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.OneToMany
-import javax.persistence.Table
-import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.NotNull
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.Table
+import jakarta.validation.constraints.NotEmpty
 
 @Entity
 @Table(name = "image")
@@ -31,12 +23,12 @@ class ImageEntity {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_comic_book", referencedColumnName = "id")
-    var comicBook: ComicBook? = null
+    var comicBook: ComicBookEntity? = null
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_volume", referencedColumnName = "id")
-    var volume: Volume? = null
+    var volume: VolumeEntity? = null
 
     @JsonIgnore
     @ManyToOne
@@ -55,9 +47,9 @@ class ImageEntity {
     constructor(
         imagePath: String,
         description: String? = null,
-        comicBook: ComicBook? = null,
+        comicBook: ComicBookEntity? = null,
         chapter: ChapterEntity? = null,
-        volume: Volume? = null,
+        volume: VolumeEntity? = null,
     ) {
         this.imagePath = imagePath
         this.description = description

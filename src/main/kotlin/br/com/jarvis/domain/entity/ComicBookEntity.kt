@@ -1,24 +1,24 @@
 package br.com.jarvis.domain.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
+import jakarta.persistence.Table
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.NotNull
 import java.time.LocalDate
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.OneToMany
-import javax.persistence.Table
-import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.NotNull
 
 @Entity
 @Table(name = "comic_book")
-class ComicBook {
+class ComicBookEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
@@ -41,7 +41,7 @@ class ComicBook {
         targetEntity = AuthorEntity::class,
         cascade = [CascadeType.ALL]
     )
-    var author:  Set<AuthorEntity> = emptySet()
+    var author: Set<AuthorEntity> = emptySet()
 
     @OneToMany(
         mappedBy = "comicBook",
@@ -50,7 +50,7 @@ class ComicBook {
         targetEntity = AnimationEntity::class,
         cascade = [CascadeType.ALL]
     )
-    var animation:  Set<AnimationEntity> = emptySet()
+    var animation: Set<AnimationEntity> = emptySet()
 
     @OneToMany(
         mappedBy = "comicBook",

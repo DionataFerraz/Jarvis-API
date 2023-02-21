@@ -1,17 +1,19 @@
 package br.com.jarvis.domain.repository
 
-import br.com.jarvis.domain.entity.ComicBook
+import br.com.jarvis.domain.entity.ComicBookEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
-import java.util.*
+import org.springframework.stereotype.Repository
+import java.util.Optional
 
-interface ComicBookRepository : JpaRepository<ComicBook, Long> {
+@Repository
+interface ComicBookRepository : JpaRepository<ComicBookEntity, Long> {
 
     @Query(
         "SELECT * FROM comic_book cb LEFT JOIN comic_book_locale cbl ON cb.id = cbl.id_comic_book WHERE cbl.language = :language",
         nativeQuery = true
     )
-    fun findByLanguageComicBookLocaleIn(language: String?): List<ComicBook>
+    fun findByLanguageComicBookLocaleIn(language: String?): List<ComicBookEntity>
 
     @Query(
         "SELECT" +
@@ -38,6 +40,6 @@ interface ComicBookRepository : JpaRepository<ComicBook, Long> {
                 "   cbl.language = :language",
         nativeQuery = true
     )
-    fun findByIdComicBookLocaleIn(id: Long, language: String?): Optional<ComicBook>
+    fun findByIdComicBookLocaleIn(id: Long, language: String?): Optional<ComicBookEntity>
 
 }
