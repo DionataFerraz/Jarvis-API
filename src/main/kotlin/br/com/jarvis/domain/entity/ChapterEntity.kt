@@ -17,6 +17,7 @@ import javax.persistence.Table
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 
+// TODO: Create implementation
 @Entity
 @Table(name = "chapter")
 class ChapterEntity {
