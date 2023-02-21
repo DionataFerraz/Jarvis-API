@@ -2,7 +2,7 @@ package br.com.jarvis.rest.controller.dto
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.util.*
+import java.util.Date
 
 data class AnimationDTO(
     @JsonProperty("name")

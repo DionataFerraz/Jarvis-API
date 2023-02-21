@@ -1,7 +1,7 @@
 package br.com.jarvis.service.impl
 
 import br.com.jarvis.domain.entity.BookCoverType
-import br.com.jarvis.domain.entity.Volume
+import br.com.jarvis.domain.entity.VolumeEntity
 import br.com.jarvis.domain.repository.ComicBookLocaleRepository
 import br.com.jarvis.domain.repository.ComicBookRepository
 import br.com.jarvis.domain.repository.VolumeRepository
@@ -26,7 +26,7 @@ open class VolumeServiceImpl(
     override fun saveById(id: Long, volumes: List<VolumeDTO>?) {
         comicBookLocaleRepository.findById(id).map { comicBookLocale ->
             volumes?.map { volumeDTO ->
-                Volume(
+                VolumeEntity(
                     releaseYear = volumeDTO.releaseYear,
                     number = volumeDTO.number,
                     description = volumeDTO.description,

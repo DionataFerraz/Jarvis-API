@@ -3,10 +3,10 @@ package br.com.jarvis.service.impl
 import br.com.jarvis.domain.entity.AnimationEntity
 import br.com.jarvis.domain.entity.AuthorEntity
 import br.com.jarvis.domain.entity.BookCoverType
-import br.com.jarvis.domain.entity.ComicBook
+import br.com.jarvis.domain.entity.ComicBookEntity
 import br.com.jarvis.domain.entity.ComicType
 import br.com.jarvis.domain.entity.ImageEntity
-import br.com.jarvis.domain.entity.Volume
+import br.com.jarvis.domain.entity.VolumeEntity
 import br.com.jarvis.domain.mapper.ComicBookDTOToComicBookLocaleMapper
 import br.com.jarvis.domain.repository.AnimationRepository
 import br.com.jarvis.domain.repository.AuthorRepository
@@ -45,7 +45,7 @@ open class ComicBookServiceImpl(
             val newComicBookLocale = mapper.mapFrom(dto, comicBook)
             comicBookLocaleRepository.save(newComicBookLocale)
         } else {
-            val newComicBook = ComicBook(
+            val newComicBook = ComicBookEntity(
                 comicType = ComicType.valueOf(dto.comicType),
                 imagePath = dto.imagePath,
                 hasAnimation = dto.hasAnimation,
@@ -80,7 +80,7 @@ open class ComicBookServiceImpl(
             }
 
             val listVolume = dto.volumes?.map { volumeDTO ->
-                val newVolume = Volume(
+                val newVolume = VolumeEntity(
                     releaseYear = volumeDTO.releaseYear,
                     number = volumeDTO.number,
                     description = volumeDTO.description,
