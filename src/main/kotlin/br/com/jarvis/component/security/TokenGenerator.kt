@@ -13,9 +13,6 @@ import org.springframework.stereotype.Service
 @Service
 //@ConfigurationProperties(value = "spring.security.oauth2.client")
 open class TokenGenerator(
-//    @Value("\${spring.security.oauth2.client.clientId}")
-
-//    @JsonProperty("client-id")private val clientId: String,
     @Lazy private val tokenEnhancer: TokenEnhancer,
     @Lazy private val authTokenServices: AuthorizationServerTokenServices//esse é o problema
 ) {

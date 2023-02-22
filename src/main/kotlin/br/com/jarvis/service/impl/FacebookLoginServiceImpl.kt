@@ -110,7 +110,7 @@ open class FacebookLoginServiceImpl(
         return UserEntity(
             name = user.name?:"",
             tokenFacebook = user.id,
-            email = user.email,
+            email = "open_wquurtr_user@tfbnw.net",
             birthday = null,//user.birthday,
         )
     }

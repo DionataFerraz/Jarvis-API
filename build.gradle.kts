@@ -22,18 +22,18 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("org.springframework.boot:spring-boot-starter:2.7.3")
-    implementation("org.springframework.boot:spring-boot-starter-web:2.7.3")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.7.3")
-    implementation("org.springframework.boot:spring-boot-devtools:2.7.3")
-    implementation("org.springframework.boot:spring-boot-starter-validation:2.7.3")
+    implementation("org.springframework.boot:spring-boot-starter:2.3.3.RELEASE")
+    implementation("org.springframework.boot:spring-boot-starter-web:2.3.3.RELEASE")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.3.3.RELEASE")
+    implementation("org.springframework.boot:spring-boot-devtools:2.3.3.RELEASE")
+    implementation("org.springframework.boot:spring-boot-starter-validation:2.3.3.RELEASE")
     implementation("javax.xml.bind:jaxb-api:2.3.1")
     runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:1.7.0")
     implementation("com.h2database:h2:2.1.214")
-    implementation("org.springframework.boot:spring-boot-maven-plugin:2.7.3")
-    implementation("org.springframework.boot:spring-boot-starter-oauth2-client:2.7.3")
+    implementation("org.springframework.boot:spring-boot-maven-plugin:2.3.3.RELEASE")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client:2.3.3.RELEASE")
     //QUANDO ADICIONO ESSA LIB DA PAU NAS REQUESTS, FICAM TODAS COMO NÃO AUTORIZADAS, MAS EU PRECISO PARA USAR O OAuth2AccessToken
-    implementation("org.springframework.security.oauth:spring-security-oauth2:2.3.6.RELEASE")//AuthorizationServerTokenServices
+    implementation("org.springframework.security.oauth:spring-security-oauth2:2.3.3.RELEASE")//AuthorizationServerTokenServices
     implementation("com.restfb:restfb:2.17.0")
 
 
