@@ -24,7 +24,13 @@ dependencies {
     implementation("com.h2database:h2:2.1.214")
     implementation("org.springframework.boot:spring-boot-maven-plugin:2.7.3")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client:2.7.3")
-    implementation("org.springframework.security.oauth:spring-security-oauth2:2.3.6.RELEASE")
+    implementation("org.springframework.security.oauth:spring-security-oauth2:2.3.6.RELEASE")//2.3.3
+    implementation("org.springframework.boot:spring-boot-starter-security:2.7.3")
+    implementation("org.springframework.security:spring-security-oauth2-resource-server:5.8.6")
+    implementation("com.google.code.gson:gson:2.8.8")
+    implementation("org.springframework.security:spring-security-oauth2-core:2.1.3.RELEASE")
+//    implementation("org.springframework.security:spring-security-oauth2-resource-server:5.8.6")
+//    implementation("org.springframework.security:spring-security-oauth2-client:5.8.6")
     implementation("com.restfb:restfb:2.17.0")
 
 }

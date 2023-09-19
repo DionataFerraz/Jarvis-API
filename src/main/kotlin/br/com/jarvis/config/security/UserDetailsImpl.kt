@@ -1,13 +1,20 @@
 package br.com.jarvis.config.security
 
 import br.com.jarvis.domain.entity.UserEntity
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 
 data class UserDetailsImpl(private val user: UserEntity, var facebook: Boolean = false) : UserDetails {
 
+    val id: Long? = user.id
+    val tokenFacebook: String? = user.tokenFacebook
+//    val scope: String? = user.tokenFacebook
+
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return mutableListOf()
+        return mutableListOf<GrantedAuthority>(
+//            SimpleGrantedAuthority("app")
+        )
     }
 
     override fun isEnabled(): Boolean {
