@@ -24,7 +24,7 @@ dependencies {
     implementation("com.h2database:h2:2.1.214")
     implementation("org.springframework.boot:spring-boot-maven-plugin:2.7.3")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client:2.7.3")
-    implementation("org.springframework.security.oauth:spring-security-oauth2:2.3.6.RELEASE")
+    implementation("org.springframework.security.oauth:spring-security-oauth2:2.3.6.RELEASE")//2.3.3
     implementation("com.restfb:restfb:2.17.0")
 
 }

@@ -45,13 +45,15 @@ class CustomAuthenticationProvider(
         val token = UsernamePasswordAuthenticationToken(user!!.username, "N/A",  listOf(
             SimpleGrantedAuthority("DEFAULT")
         ))
-        token.details = authentication.details
+        token.details = authentication.details//eu comentei isso e consegui resgatar o token
 
         println("teste ========> createSuccessfulAuthentication $token")
         return token
     }
 
     override fun supports(authentication: Class<*>): Boolean {
+        // o Problema não é aqui, coloquei como true e para fazer o login ele da ok, mas se eu colocar pra fazer o post da ruim
+        // e se eu colocar como false até o post para criar um usuário da 403
         return authentication == UsernamePasswordAuthenticationToken::class.java
     }
 }

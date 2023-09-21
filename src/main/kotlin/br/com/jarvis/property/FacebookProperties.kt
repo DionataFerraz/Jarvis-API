@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 
 @Component
-@ConfigurationProperties(value = "spring.social.facebook")
+@ConfigurationProperties(value = "spring.security.oauth2.client.registration.facebook")
 class FacebookProperties (
     @JsonProperty("secret-app-key")
     var secretAppKey: String = "",
