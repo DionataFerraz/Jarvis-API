@@ -10,11 +10,14 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.NotNull
-import java.util.Date
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
+import java.util.*
 
 @Entity
 @Table(name = "user_entity")
-class UserEntity {
+class UserEntity: UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
@@ -31,7 +34,7 @@ class UserEntity {
     var email: String? = null
 
     @Column(name = "password", length = 500)
-    var password: String? = null
+    var pwd: String? = null
 
     @Column(name = "birthday")
     var birthday: Date? = null
@@ -78,7 +81,7 @@ class UserEntity {
     ) {
         this.name = name
         this.email = email
-        this.password = password
+        this.pwd = password
         this.nickName = nickName
         this.birthday = birthday
         this.imagePath = imagePath
@@ -99,4 +102,34 @@ class UserEntity {
                 "   imagePath = $imagePath," +
                 ")"
     }
+
+
+    override fun getAuthorities(): Collection<GrantedAuthority?> {
+        return setOf(SimpleGrantedAuthority(roleType.name))
+    }
+
+    override fun getPassword(): String {
+        return pwd.orEmpty()
+    }
+
+    override fun getUsername(): String {
+        return email.orEmpty()
+    }
+
+    override fun isAccountNonExpired(): Boolean {
+        return true
+    }
+
+    override fun isAccountNonLocked(): Boolean {
+        return true
+    }
+
+    override fun isCredentialsNonExpired(): Boolean {
+        return true
+    }
+
+    override fun isEnabled(): Boolean {
+        return true
+    }
+
 }

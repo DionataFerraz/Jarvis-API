@@ -5,13 +5,18 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
+import java.util.*
 
 @Repository
 interface UserRepository : JpaRepository<UserEntity, Long> {
 
     //    @Query(nativeQuery = true, value = "select * from \"user_entity\" where email ilike :email")
-    @Query(nativeQuery = true, value = "select * from user_entity where email = :email")
-    fun findByEmail(email: String?): UserEntity?
+//    @Query(nativeQuery = true, value = "select * from user_entity where email = :email")
+//    fun findByEmail(email: String?): UserEntity?
+
+
+    //    UserDetails findByLogin(String login);
+    fun findByEmail(login: String?): Optional<UserEntity?>?
 
     //    @Query(nativeQuery = true, value = "select * from user where token_facebook ilike :token")
     @Query(
