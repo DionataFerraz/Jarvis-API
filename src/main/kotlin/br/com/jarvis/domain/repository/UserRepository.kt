@@ -16,28 +16,30 @@ interface UserRepository : JpaRepository<UserEntity, Long> {
 
 
     //    UserDetails findByLogin(String login);
-    fun findByEmail(login: String?): Optional<UserEntity?>?
+//    fun findByEmail(login: String?): Optional<UserEntity?>?
 
     //    @Query(nativeQuery = true, value = "select * from user where token_facebook ilike :token")
-    @Query(
-        "SELECT * FROM user_entity WHERE token_facebook = :token",
-        nativeQuery = true
-    )
-    fun findByTokenFacebook(token: String): UserEntity?
+//    @Query(
+//        "SELECT * FROM user_entity WHERE token_facebook = :token",
+//        nativeQuery = true
+//    )
+//    fun findByTokenFacebook(token: String): UserEntity?
 
     //    @Query(nativeQuery = true, value = "select count(1) > 0 from \"user_entity\" where email ilike :email")
-    @Query(nativeQuery = true, value = "select count(1) > 0 from user_entity where email = :email")
-    fun existsByEmail(email: String?): Boolean
+//    @Query(nativeQuery = true, value = "select count(1) > 0 from user_entity where email = :email")
+//    fun existsByEmail(email: String?): Boolean
 
 
-    @Query(
-        value = "select * from user_entity u WHERE u.name = :identity or u.email = :identity",
-        nativeQuery = true
-    )
-    fun findByUsernameOrEmailSql(@Param("identity") username: String?): UserEntity?
+//    @Query(
+//        value = "select * from user_entity u WHERE u.name = :identity or u.email = :identity",
+//        nativeQuery = true
+//    )
+//    fun findByUsernameOrEmailSql(@Param("identity") username: String?): UserEntity?
 
 
-    fun findByName(facebookName: String?): UserEntity?
+//    fun findByName(facebookName: String?): UserEntity?
+
+    fun findByEmail(email: String): UserEntity?
 }
 
 
