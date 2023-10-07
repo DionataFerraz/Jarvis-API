@@ -44,5 +44,6 @@ class TokenService(@Value("\${api.security.token.secret}") private val secret: S
     }
 
     private fun generateOneHourExpirationUTC(): Instant =
-        LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.UTC)
+        LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"))
+
 }

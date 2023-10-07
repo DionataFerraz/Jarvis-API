@@ -11,8 +11,10 @@ import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
-class SecurityFilter(private val userRepository: UserRepository, private val tokenService: TokenService) :
-    OncePerRequestFilter() {
+class SecurityFilter(
+    private val userRepository: UserRepository,
+    private val tokenService: TokenService
+) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -30,6 +32,8 @@ class SecurityFilter(private val userRepository: UserRepository, private val tok
         filterChain.doFilter(request, response)
     }
 
-    private fun retrieveToken(request: HttpServletRequest): String? =
-        request.getHeader("Authorization")
+    private fun retrieveToken(request: HttpServletRequest): String? {
+        val authHeader = request.getHeader("Authorization") ?: return null
+        return authHeader.replace("Bearer ", "")
+    }
 }

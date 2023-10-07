@@ -1,17 +1,24 @@
 spring:
+#  h2:
+#    console:
+#      enabled: true
+#      path: /my-h2-console
+#      settings:
+#        trace: false
+#        web-allow-others: false
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MariaDBDialect
+        dialect: org.hibernate.dialect.H2Dialect
     open-in-view: false
   datasource:
     username: root
     password: root-pass
-    url: jdbc:mariadb://localhost:3306/JARVIS_DB?createDatabaseIfNotExist=true
-    driverClassName: org.mariadb.jdbc.Driver
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
 api:
   security:
     token:
