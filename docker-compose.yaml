@@ -1,0 +1,11 @@
+version: '3'
+services:
+  db:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root-pass
+    volumes:
+      - ~/mariadb/data:/var/lib/mysql
+    ports:
+      - '3306:3306'
