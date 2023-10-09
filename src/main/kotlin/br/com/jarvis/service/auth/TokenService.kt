@@ -1,6 +1,7 @@
 package br.com.jarvis.service.auth
 
 import br.com.jarvis.domain.entity.UserEntity
+import br.com.jarvis.rest.controller.dto.AccessTokenDTO
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTCreationException
@@ -16,16 +17,18 @@ class TokenService(@Value("\${api.security.token.secret}") private val secret: S
 
     private val algorithm = Algorithm.HMAC512(secret)
 
-    fun generateToken(user: UserEntity): String {
+    fun generateToken(user: UserEntity): AccessTokenDTO {
         return try {
-            JWT.create()
-                .withIssuer("auth-api")
-                .withSubject(user.email)
-                .withClaim("userId", user.id)
-                .withClaim("role", user.roleType.name)
-                .withClaim("email", user.email)
-                .withExpiresAt(generateOneHourExpirationUTC())
-                .sign(this.algorithm)
+            AccessTokenDTO(
+                accessToken = JWT.create()
+                    .withIssuer("auth-api")
+                    .withSubject(user.email)
+                    .withClaim("userId", user.id)
+                    .withClaim("role", user.roleType.name)
+                    .withClaim("email", user.email)
+                    .withExpiresAt(generateOneHourExpirationUTC())
+                    .sign(this.algorithm)
+            )
         } catch (exception: JWTCreationException) {
             throw RuntimeException("Error while generating token", exception)
         }

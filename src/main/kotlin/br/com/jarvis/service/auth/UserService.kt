@@ -3,6 +3,7 @@ package br.com.jarvis.service.auth
 import br.com.jarvis.domain.entity.RoleType
 import br.com.jarvis.domain.entity.UserEntity
 import br.com.jarvis.domain.repository.UserRepository
+import br.com.jarvis.exception.UserRuleException
 import br.com.jarvis.rest.controller.auth.CreateUserRequest
 import br.com.jarvis.rest.controller.auth.LoginOutput
 import org.springframework.security.core.userdetails.UserDetails
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service
 class UserService(private val userRepository: UserRepository, private val passwordEncoder: PasswordEncoder) : UserDetailsService {
 
     override fun loadUserByUsername(username: String): UserDetails {
-        return userRepository.findByEmail(username) ?: throw RuntimeException("¯\\_(ツ)_/¯")
+        return userRepository.findByEmail(username) ?: throw UserRuleException("User not found")
     }
 
     fun createUser(createUserRequest: CreateUserRequest): LoginOutput {

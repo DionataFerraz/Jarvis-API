@@ -1,6 +1,7 @@
 package br.com.jarvis.config.security
 
 import br.com.jarvis.domain.repository.UserRepository
+import br.com.jarvis.exception.UserRuleException
 import br.com.jarvis.service.auth.TokenService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -23,11 +24,10 @@ class SecurityFilter(
     ) {
         retrieveToken(request)?.let { token ->
             val emailClaim: String = tokenService.validateToken(token)
-            val user = userRepository.findByEmail(emailClaim) ?: throw RuntimeException("¯\\_(ツ)_/¯")
+            val user = userRepository.findByEmail(emailClaim) ?: throw UserRuleException("User not found")
 
             val authentication = UsernamePasswordAuthenticationToken(user, null, user.authorities)
-
-            SecurityContextHolder.getContext().authentication = authentication;
+            SecurityContextHolder.getContext().authentication = authentication
         }
         filterChain.doFilter(request, response)
     }

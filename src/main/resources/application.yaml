@@ -8,6 +8,7 @@ spring:
 #        web-allow-others: false
   jpa:
     show-sql: true
+    format_sql: true
     hibernate:
       ddl-auto: update
     properties:
@@ -23,33 +24,7 @@ api:
   security:
     token:
       secret: ${JWT_SECRET:my-secret-key}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-##spring.datasource.url=jdbc:h2:mem:testdb
-#spring.datasource.driveClassName=org.h2.Driver
-#spring.datasource.username=sa
-#spring.datasource.password=password
-#
-#spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
-#
-#spring.h2.console.enabled=true
-#spring.h2.console.path=/h2-console
-#
-#spring.jpa.properties.hibernate.show_sql=true
-#spring.jpa.properties.hibernate.format_sql=true
+  social:
+    facebook:
+      appId: 524257436231028
+      secretAppKey: a45f53d2c7b335af811797e77d50cbfb

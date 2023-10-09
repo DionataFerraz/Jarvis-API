@@ -20,14 +20,16 @@ class UserEntity(
     @Column(name = "email", length = 500)
     val email: String,
     @Column(name = "password", length = 500)
-    val pass: String,
+    val pass: String? = null,
     @Column(name = "birthday")
     val birthday: Date? = null,
     @Column(name = "image_path", length = 1000)
     val imagePath: String? = null,
     @Column(name = "role_type", nullable = false)
     @Enumerated(EnumType.STRING)
-    val roleType: RoleType
+    val roleType: RoleType,
+    @Column(name = "token_facebook", length = 500, unique = true)
+    var tokenFacebook: String? = null
 ) : UserDetails {
 
 //    @Column(name = "token_facebook", length = 500, unique = true)
@@ -57,6 +59,7 @@ class UserEntity(
                 "   nickName = $nickName," +
                 "   birthday = $birthday," +
                 "   imagePath = $imagePath," +
+                "   tokenFacebook = $tokenFacebook," +
                 ")"
     }
 
@@ -65,7 +68,7 @@ class UserEntity(
     }
 
     override fun getPassword(): String {
-        return this.pass
+        return this.pass.orEmpty()
     }
 
     override fun getUsername(): String {
