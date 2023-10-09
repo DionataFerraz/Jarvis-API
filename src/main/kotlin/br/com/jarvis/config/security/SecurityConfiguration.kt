@@ -29,16 +29,10 @@ class SecurityConfiguration(private val securityFilter: SecurityFilter) {
         }.authorizeHttpRequests {
             it.requestMatchers(HttpMethod.GET, "/h2-console/**").permitAll()
             it.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-            it.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+            it.requestMatchers(HttpMethod.POST, "/auth/facebook").permitAll()
             it.requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
             it.requestMatchers(HttpMethod.GET, "/api/**").authenticated()
             it.requestMatchers(HttpMethod.POST, "/api/**").authenticated()
-
-            // Se eu colocar algum desses dois da pau
-//                .requestMatchers(HttpMethod.POST, "/pecas").hasRole("ADMIN")
-//                .requestMatchers(HttpMethod.POST, "/pecas").hasRole("ATENDENTE")
-//                .anyRequest().authenticated()
-
         }
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
