@@ -14,6 +14,7 @@ import br.com.jarvis.domain.repository.ComicBookLocaleRepository
 import br.com.jarvis.domain.repository.ComicBookRepository
 import br.com.jarvis.domain.repository.ImageRepository
 import br.com.jarvis.domain.repository.VolumeRepository
+import br.com.jarvis.exception.ComicBookException
 import br.com.jarvis.exception.ComicBookExistsException
 import br.com.jarvis.exception.ComicBookNeedsImageTypeException
 import br.com.jarvis.rest.controller.dto.ComicBookDTO
@@ -132,24 +133,29 @@ open class ComicBookServiceImpl(
 
     @Transactional
     override fun fetchAllComics(language: String?): List<ComicBookDTO> {
-        val comicBooks = repository.findByLanguageComicBookLocaleIn(language)
-        val locales = comicBookLocaleRepository.findByComicBookIn(comicBooks)
+        try {
+            val comicBooks = repository.findByLanguageComicBookLocaleIn(language)
+            val locales = comicBookLocaleRepository.findByComicBookIn(comicBooks)
 
-        return comicBooks.map { comicBook ->
-            val locale = locales.first {
-                it.comicBook == comicBook
+            return comicBooks.map { comicBook ->
+                val locale = locales.first {
+                    it.comicBook == comicBook
+                }
+
+                ComicBookDTO(
+                    id = comicBook.id,
+                    comicType = comicBook.comicType.name,
+                    imagePath = comicBook.imagePath,
+                    hasAnimation = comicBook.hasAnimation,
+                    releaseDate = comicBook.releaseDate,
+                    completionDate = comicBook.completionDate,
+                    name = locale.name,
+                    description = locale.description,
+                    language = locale.language,
+                )
             }
-
-            ComicBookDTO(
-                comicType = comicBook.comicType.name,
-                imagePath = comicBook.imagePath,
-                hasAnimation = comicBook.hasAnimation,
-                releaseDate = comicBook.releaseDate,
-                completionDate = comicBook.completionDate,
-                name = locale.name,
-                description = locale.description,
-                language = locale.language,
-            )
+        } catch (ex: Exception) {
+            throw ComicBookException(ex.message ?: "Error fetchAllComics") // se eu não fizer isso eu tomo um erro de não autorizado, preciso ajustar isso para não ocorrer com outros problemas de request
         }
     }
 }

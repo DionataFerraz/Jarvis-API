@@ -27,7 +27,6 @@ dependencies {
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    implementation("com.h2database:h2:2.1.214")
     implementation("org.springframework.boot:spring-boot-maven-plugin:3.1.0")
 
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client:3.1.0")

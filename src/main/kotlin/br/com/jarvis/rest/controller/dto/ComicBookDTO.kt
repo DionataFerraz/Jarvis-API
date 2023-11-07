@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDate
 
 data class ComicBookDTO(
+    @JsonProperty("id")
+    val id: Long?,
     @JsonProperty("comicType")
     val comicType: String,
     @JsonProperty("hasAnimation")

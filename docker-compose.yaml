@@ -8,4 +8,4 @@ services:
     volumes:
       - ~/mariadb/data:/var/lib/mysql
     ports:
-      - '3306:3306'
+      - '3308:3306'

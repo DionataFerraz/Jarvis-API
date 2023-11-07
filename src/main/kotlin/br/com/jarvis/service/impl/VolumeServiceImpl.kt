@@ -71,6 +71,7 @@ open class VolumeServiceImpl(
             }
 
             ComicBookDTO(
+                id = comicBook.id,
                 comicType = comicBook.comicType.name,
                 imagePath = comicBook.imagePath,
                 hasAnimation = comicBook.hasAnimation,
