@@ -2,6 +2,7 @@ package br.com.jarvis.rest.controller
 
 import br.com.jarvis.exception.AuthRuleException
 import br.com.jarvis.exception.BusinessRuleException
+import br.com.jarvis.exception.ComicBookException
 import br.com.jarvis.exception.ComicBookExistsException
 import br.com.jarvis.exception.ComicBookNotFoundException
 import br.com.jarvis.exception.UserRuleException
@@ -35,6 +36,12 @@ class ApplicationControllerAdvice {
     fun handleBusinessRuleException(exception: BusinessRuleException): ApiErrors {
         val errorMessage: String = exception.message
         return ApiErrors(errorMessage)
+    }
+
+    @ExceptionHandler(ComicBookException::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun handleComicBookException(exception: ComicBookException): ApiErrors {
+        return ApiErrors(exception.message.orEmpty())
     }
 
     @ExceptionHandler(ComicBookNotFoundException::class)

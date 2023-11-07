@@ -10,7 +10,10 @@ import java.util.Optional
 interface ComicBookRepository : JpaRepository<ComicBookEntity, Long> {
 
     @Query(
-        "SELECT * FROM comic_book cb LEFT JOIN comic_book_locale cbl ON cb.id = cbl.id_comic_book WHERE cbl.language = :language",
+        "SELECT cb.id AS cb_id, cbl.id AS cbl_id, cb.*, cbl.*" +
+                " FROM comic_book cb " +
+                "LEFT JOIN comic_book_locale cbl ON cb.id = cbl.id_comic_book" +
+                " WHERE cbl.language = :language",
         nativeQuery = true
     )
     fun findByLanguageComicBookLocaleIn(language: String?): List<ComicBookEntity>

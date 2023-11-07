@@ -1,6 +1,5 @@
 package br.com.jarvis.config.security
 
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -21,13 +20,10 @@ class SecurityConfiguration(private val securityFilter: SecurityFilter) {
     @Bean
     fun securityFilterChain(httpSecurity: HttpSecurity, securityFilter: SecurityFilter): SecurityFilterChain {
         return httpSecurity.csrf {
-            it.ignoringRequestMatchers("/h2-console/**")
-            it.ignoringRequestMatchers(toH2Console())
             it.disable()
         }.sessionManagement {
             it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         }.authorizeHttpRequests {
-            it.requestMatchers(HttpMethod.GET, "/h2-console/**").permitAll()
             it.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
             it.requestMatchers(HttpMethod.POST, "/auth/facebook").permitAll()
             it.requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
