@@ -1,6 +1,5 @@
 package br.com.jarvis.rest.controller
 
-import br.com.jarvis.rest.controller.dto.ComicBookDTO
 import br.com.jarvis.rest.controller.dto.VolumeDTO
 import br.com.jarvis.service.VolumeService
 import jakarta.validation.Valid
@@ -25,11 +24,19 @@ class VolumeController(private val service: VolumeService) {
     }
 
     @GetMapping("{id}")
-    fun fetchComicsByLanguage(
+    fun fetchVolume(
         @PathVariable id: Long,
-        @RequestHeader("Accept-Language") language: String?
-    ): ComicBookDTO {
-        return service.fetchAllComics(id = id, language = language)
+        @RequestHeader("Accept-Language") language: String
+    ): VolumeDTO {
+        return service.fetchVolume(id = id, language = language)
+    }
+
+    @GetMapping("{id}/all")
+    fun fetchAllVolumesByLanguage(
+        @PathVariable id: Long,
+        @RequestHeader("Accept-Language") language: String
+    ): List<VolumeDTO> {
+        return service.fetchAllVolumes(id = id, language = language)
     }
 
 }

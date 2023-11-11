@@ -6,9 +6,7 @@ import br.com.jarvis.domain.repository.ComicBookLocaleRepository
 import br.com.jarvis.domain.repository.ComicBookRepository
 import br.com.jarvis.domain.repository.VolumeRepository
 import br.com.jarvis.exception.ComicBookNotFoundException
-import br.com.jarvis.rest.controller.dto.AnimationDTO
-import br.com.jarvis.rest.controller.dto.AuthorDTO
-import br.com.jarvis.rest.controller.dto.ComicBookDTO
+import br.com.jarvis.exception.VolumeNotFoundException
 import br.com.jarvis.rest.controller.dto.ImageDTO
 import br.com.jarvis.rest.controller.dto.VolumeDTO
 import br.com.jarvis.service.VolumeService
@@ -44,65 +42,56 @@ open class VolumeServiceImpl(
     }
 
     @Transactional
-    override fun fetchAllComics(id: Long, language: String?): ComicBookDTO {
+    override fun fetchVolume(id: Long, language: String): VolumeDTO {
+        return repository.findById(id).map { volumeEntity ->
+            VolumeDTO(
+                id = volumeEntity.id,
+                releaseYear = volumeEntity.releaseYear,
+                number = volumeEntity.number,
+                description = volumeEntity.description,
+                isbn = volumeEntity.isbn,
+                pages = volumeEntity.pages,
+                bookCoverType = volumeEntity.bookCoverType.name,
+                images = volumeEntity.images.map { imageEntity ->
+                    ImageDTO(
+                        image = imageEntity.imagePath,
+                        description = imageEntity.description
+                    )
+                }
+            )
+        }.orElseThrow {
+            VolumeNotFoundException
+        }
+    }
+
+    @Transactional
+    override fun fetchAllVolumes(id: Long, language: String): List<VolumeDTO> {
         return comicBookRepository.findByIdComicBookLocaleIn(id, language).map { comicBook ->
             val locale = comicBook.locales.first {
                 it.language == language
             }
 
-            val authorDTO = comicBook.author.map { authorEntity ->
-                AuthorDTO(
-                    name = authorEntity.name,
-                    synopsis = authorEntity.synopsis,
-                    birthday = authorEntity.birthday,
-                    imagePath = authorEntity.imagePath,
-                )
-            }
-
-            val animationDTO = comicBook.animation.map { animationEntity ->
-                AnimationDTO(
-                    name = animationEntity.name,
-                    releaseDate = animationEntity.releaseDate,
-                    completionDate = animationEntity.completionDate,
-                    episodeQtd = animationEntity.episodeQtd,
-                    seasonQtd = animationEntity.seasonQtd,
-                    imagePath = animationEntity.imagePath,
-                )
-            }
-
-            ComicBookDTO(
-                id = comicBook.id,
-                comicType = comicBook.comicType.name,
-                imagePath = comicBook.imagePath,
-                hasAnimation = comicBook.hasAnimation,
-                releaseDate = comicBook.releaseDate,
-                completionDate = comicBook.completionDate,
-                name = locale.name,
-                description = locale.description,
-                language = locale.language,
-                authors = authorDTO,
-                animations = animationDTO,
-                volumes = locale.volumes
-                    .sortedBy { it.number }
-                    .map { volumeEntity ->
-                        VolumeDTO(
-                            releaseYear = volumeEntity.releaseYear,
-                            number = volumeEntity.number,
-                            description = volumeEntity.description,
-                            isbn = volumeEntity.isbn,
-                            pages = volumeEntity.pages,
-                            bookCoverType = volumeEntity.bookCoverType.name,
-                            images = volumeEntity.images.map { imageEntity ->
-                                ImageDTO(
-                                    image = imageEntity.imagePath,
-                                    description = imageEntity.description
-                                )
-                            }
-                        )
-                    }
-            )
+            locale.volumes
+                .sortedBy { it.number }
+                .map { volumeEntity ->
+                    VolumeDTO(
+                        id = volumeEntity.id,
+                        releaseYear = volumeEntity.releaseYear,
+                        number = volumeEntity.number,
+                        description = volumeEntity.description,
+                        isbn = volumeEntity.isbn,
+                        pages = volumeEntity.pages,
+                        bookCoverType = volumeEntity.bookCoverType.name,
+                        images = volumeEntity.images.map { imageEntity ->
+                            ImageDTO(
+                                image = imageEntity.imagePath,
+                                description = imageEntity.description
+                            )
+                        }
+                    )
+                }
         }.orElseThrow {
-            ComicBookNotFoundException
+            VolumeNotFoundException
         }
     }
 }

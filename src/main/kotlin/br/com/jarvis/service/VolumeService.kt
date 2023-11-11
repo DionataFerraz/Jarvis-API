@@ -5,5 +5,6 @@ import br.com.jarvis.rest.controller.dto.VolumeDTO
 
 interface VolumeService {
     fun saveById(id: Long, volumes: List<VolumeDTO>? = listOf())
-    fun fetchAllComics(id: Long, language: String?): ComicBookDTO
+    fun fetchVolume(id: Long, language: String): VolumeDTO
+    fun fetchAllVolumes(id: Long, language: String): List<VolumeDTO>
 }

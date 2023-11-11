@@ -207,6 +207,7 @@ open class ComicBookServiceImpl(
                     .sortedBy { it.number }
                     .map { volumeEntity ->
                         VolumeDTO(
+                            id = volumeEntity.id,
                             releaseYear = volumeEntity.releaseYear,
                             number = volumeEntity.number,
                             description = volumeEntity.description,

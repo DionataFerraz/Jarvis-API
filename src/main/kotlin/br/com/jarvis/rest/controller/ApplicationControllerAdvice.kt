@@ -6,6 +6,7 @@ import br.com.jarvis.exception.ComicBookException
 import br.com.jarvis.exception.ComicBookExistsException
 import br.com.jarvis.exception.ComicBookNotFoundException
 import br.com.jarvis.exception.UserRuleException
+import br.com.jarvis.exception.VolumeNotFoundException
 import br.com.jarvis.rest.ApiErrors
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -53,6 +54,12 @@ class ApplicationControllerAdvice {
     @ExceptionHandler(ComicBookExistsException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleComicBookExistsException(exception: ComicBookExistsException): ApiErrors {
+        return ApiErrors(exception.message.orEmpty())
+    }
+
+    @ExceptionHandler(VolumeNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleVolumeNotFoundException(exception: VolumeNotFoundException): ApiErrors {
         return ApiErrors(exception.message.orEmpty())
     }
 

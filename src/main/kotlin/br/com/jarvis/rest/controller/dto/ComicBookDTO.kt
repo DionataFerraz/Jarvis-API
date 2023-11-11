@@ -41,6 +41,8 @@ data class ImageDTO(
 )
 
 data class VolumeDTO(
+    @JsonProperty("id")
+    val id: Long?,
     @JsonProperty("number")
     val number: Int,
     @JsonProperty("releaseYear")
