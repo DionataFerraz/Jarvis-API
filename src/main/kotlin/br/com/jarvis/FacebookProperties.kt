@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 
 @Component
 @ConfigurationProperties(value = "api.social.facebook")
-data class FacebookProperties (
+data class FacebookProperties(
     @JsonProperty("secretAppKey")
     var secretAppKey: String = "",
     @JsonProperty("appId")

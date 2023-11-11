@@ -24,7 +24,7 @@ class ComicBookController(private val service: ComicBookService) {
 
     @GetMapping
     fun fetchComicsByLanguage(
-        @RequestHeader("Accept-Language") language: String?
+        @RequestHeader("Accept-Language") language: String
     ): List<ComicBookDTO> {
         return service.fetchAllComics(language = language)
     }

@@ -18,8 +18,6 @@ import br.com.jarvis.exception.ComicBookException
 import br.com.jarvis.exception.ComicBookExistsException
 import br.com.jarvis.exception.ComicBookNeedsImageTypeException
 import br.com.jarvis.rest.controller.dto.ComicBookDTO
-import br.com.jarvis.rest.controller.dto.ImageDTO
-import br.com.jarvis.rest.controller.dto.VolumeDTO
 import br.com.jarvis.service.ComicBookService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -134,7 +132,7 @@ open class ComicBookServiceImpl(
     }
 
     @Transactional
-    override fun fetchAllComics(language: String?): List<ComicBookDTO> {
+    override fun fetchAllComics(language: String): List<ComicBookDTO> {
         try {
             val comicBooks = repository.findByLanguageComicBookLocaleIn(language)
             val locales = comicBookLocaleRepository.findByComicBookIn(comicBooks)
@@ -154,28 +152,10 @@ open class ComicBookServiceImpl(
                     name = locale.name,
                     description = locale.description,
                     language = locale.language,
-                    volumes = locale.volumes
-                        .sortedBy { it.number }
-                        .map { volumeEntity ->
-                            VolumeDTO(
-                                releaseYear = volumeEntity.releaseYear,
-                                number = volumeEntity.number,
-                                description = volumeEntity.description,
-                                isbn = volumeEntity.isbn,
-                                pages = volumeEntity.pages,
-                                bookCoverType = volumeEntity.bookCoverType.name,
-                                images = volumeEntity.images.map { imageEntity ->
-                                    ImageDTO(
-                                        image = imageEntity.imagePath,
-                                        description = imageEntity.description
-                                    )
-                                }
-                            )
-                        }
                 )
             }
         } catch (ex: Exception) {
-            throw ComicBookException(ex.message ?: "Error fetchAllComics") // se eu não fizer isso eu tomo um erro de não autorizado, preciso ajustar isso para não ocorrer com outros problemas de request
+            throw ComicBookException(ex.message ?: "Error fetch all comics")
         }
     }
 }
