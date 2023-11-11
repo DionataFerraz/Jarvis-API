@@ -1,7 +1,6 @@
 package br.com.jarvis.rest.controller.auth
 
 import br.com.jarvis.domain.entity.UserEntity
-import br.com.jarvis.exception.AuthRuleException
 import br.com.jarvis.rest.controller.dto.AccessTokenDTO
 import br.com.jarvis.service.auth.TokenService
 import br.com.jarvis.service.auth.UserService

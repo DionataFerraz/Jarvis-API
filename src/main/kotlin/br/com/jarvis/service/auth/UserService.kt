@@ -12,7 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class UserService(private val userRepository: UserRepository, private val passwordEncoder: PasswordEncoder) : UserDetailsService {
+class UserService(
+    private val userRepository: UserRepository,
+    private val passwordEncoder: PasswordEncoder
+) : UserDetailsService {
 
     override fun loadUserByUsername(username: String): UserDetails {
         return userRepository.findByEmail(username) ?: throw UserRuleException("User not found")

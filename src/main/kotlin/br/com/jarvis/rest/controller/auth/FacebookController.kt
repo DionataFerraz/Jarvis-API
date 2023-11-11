@@ -28,7 +28,7 @@ open class FacebookController(
         @RequestHeader("access_token") accessToken: String
     ): ResponseEntity<AccessTokenDTO>? {
         return try {
-            val user =  service.loginWithFacebook(accessToken)// TODO talvez remover essa classe e usar o UserService
+            val user = service.loginWithFacebook(accessToken)// TODO talvez remover essa classe e usar o UserService
 
             val authenticationToken = UsernamePasswordAuthenticationToken(user.email, "N/A")
             val authentication: Authentication = authenticationManager.authenticate(authenticationToken)
