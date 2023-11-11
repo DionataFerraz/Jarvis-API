@@ -5,6 +5,7 @@ import br.com.jarvis.service.ComicBookService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
@@ -27,6 +28,14 @@ class ComicBookController(private val service: ComicBookService) {
         @RequestHeader("Accept-Language") language: String
     ): List<ComicBookDTO> {
         return service.fetchAllComics(language = language)
+    }
+
+    @GetMapping("{id}")
+    fun fetchComicByLanguage(
+        @PathVariable id: Long,
+        @RequestHeader("Accept-Language") language: String
+    ): ComicBookDTO {
+        return service.fetchComic(id = id, language = language)
     }
 
 }
