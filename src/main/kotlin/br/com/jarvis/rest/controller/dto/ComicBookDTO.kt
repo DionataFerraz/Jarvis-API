@@ -23,7 +23,6 @@ data class ComicBookDTO(
     val completionDate: LocalDate? = null,
     @JsonProperty("imagePath")
     val imagePath: String,
-    @JsonIgnore
     val imageType: String? = null,
     @JsonProperty("authors")
     val authors: List<AuthorDTO>? = null,
