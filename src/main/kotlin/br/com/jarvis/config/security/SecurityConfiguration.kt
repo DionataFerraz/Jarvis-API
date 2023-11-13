@@ -27,6 +27,7 @@ class SecurityConfiguration(private val securityFilter: SecurityFilter) {
             it.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
             it.requestMatchers(HttpMethod.POST, "/auth/facebook").permitAll()
             it.requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+            it.requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
             it.requestMatchers(HttpMethod.GET, "/api/**").authenticated()
             it.requestMatchers(HttpMethod.POST, "/api/**").authenticated()
         }
