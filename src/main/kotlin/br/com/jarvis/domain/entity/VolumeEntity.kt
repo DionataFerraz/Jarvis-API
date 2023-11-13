@@ -74,6 +74,9 @@ class VolumeEntity {
     @NotNull(message = "Comic type field is required.")
     lateinit var bookCoverType: BookCoverType
 
+    @NotNull(message = "Volume countReview field is required.")
+    var countReview: Int = 0
+
     constructor() {}
 
     constructor(
@@ -85,6 +88,7 @@ class VolumeEntity {
         bookCoverType: BookCoverType,
         locale: ComicBookLocale? = null,
         images: Set<ImageEntity> = emptySet(),
+        countReview: Int = 0,
     ) {
         this.releaseYear = releaseYear
         this.number = number
@@ -94,6 +98,7 @@ class VolumeEntity {
         this.bookCoverType = bookCoverType
         this.locale = locale
         this.images = images
+        this.countReview = countReview
     }
 
     override fun toString(): String {
@@ -105,6 +110,7 @@ class VolumeEntity {
                 "   isbn = ${isbn}," +
                 "   pages = ${pages}," +
                 "   bookCoverType = ${bookCoverType}," +
+                "   review = ${countReview}," +
                 ")"
     }
 }

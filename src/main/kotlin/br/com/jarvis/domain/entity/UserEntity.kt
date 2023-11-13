@@ -29,7 +29,7 @@ class UserEntity(
     @Enumerated(EnumType.STRING)
     val roleType: RoleType,
     @Column(name = "token_facebook", length = 500, unique = true)
-    var tokenFacebook: String? = null
+    var tokenFacebook: String? = null,
 ) : UserDetails {
 
 //    @Column(name = "token_facebook", length = 500, unique = true)
