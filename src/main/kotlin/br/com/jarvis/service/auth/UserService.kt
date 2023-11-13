@@ -6,6 +6,9 @@ import br.com.jarvis.domain.repository.UserRepository
 import br.com.jarvis.exception.UserRuleException
 import br.com.jarvis.rest.controller.auth.CreateUserRequest
 import br.com.jarvis.rest.controller.auth.LoginOutput
+import jakarta.servlet.http.HttpServletRequest
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -23,6 +26,12 @@ class UserService(
 
     fun createUser(createUserRequest: CreateUserRequest): LoginOutput {
         return userRepository.save(createUserRequest.toEntity()).toLoginOutput()
+    }
+
+    fun retrieveUser(): UserEntity {
+        val authentication: Authentication = SecurityContextHolder.getContext().authentication
+        val principal = authentication.principal
+        return principal as UserEntity
     }
 
     private fun CreateUserRequest.toEntity(): UserEntity {
