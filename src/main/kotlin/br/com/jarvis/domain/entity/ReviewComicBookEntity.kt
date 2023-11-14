@@ -13,28 +13,18 @@ import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotNull
 
-// TODO: Preciso ver se é melhor separar ou não cada uma das ações dos usuários, em questão de quantidade de dados faz mais sentido remover
 @Entity
-@Table(name = "user_volume_interaction")
-class UserComicBookInteractionEntity(
+@Table(name = "review_comic_book")
+class ReviewComicBookEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
     var id: Long? = null,
     @Column(nullable = false)
-    @NotNull(message = "User comic book interaction isFavorite field is required.")
-    val isFavorite: Boolean = false,
-    @Column(nullable = false)
-    @NotNull(message = "User comic book userReview isFavorite field is required.")
-    val userReview: Double = 0.0,
-    @Column(nullable = false)
-    @NotNull(message = "User comic book interaction isReadAll field is required.")
-    val isReadAll: Boolean = false,
-    @Column(nullable = false)
-    @NotNull(message = "User comic book interaction hasAllVolume field is required.")
-    val hasAllVolume: Boolean = false,
+    @NotNull(message = "Review field is required.")
+    val review: Double = 0.0,
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_comic_book", referencedColumnName = "id")
     var comicBookEntity: ComicBookEntity? = null,
     @JsonIgnore

@@ -1,21 +1,21 @@
 package br.com.jarvis.service.userinteraction
 
-import br.com.jarvis.domain.entity.UserComicBookInteractionEntity
+import br.com.jarvis.domain.entity.FavoriteComicBookEntity
 import br.com.jarvis.domain.repository.ComicBookRepository
-import br.com.jarvis.domain.repository.UseComicBookInteractionRepository
+import br.com.jarvis.domain.repository.FavoriteComicBookRepository
 import br.com.jarvis.exception.ComicBookNotFoundException
-import br.com.jarvis.exception.UserComicBookInteractionDuplicatedException
-import br.com.jarvis.exception.UserComicBookInteractionNotFoundException
+import br.com.jarvis.exception.FavoriteDuplicatedException
+import br.com.jarvis.exception.FavoriteNotFoundException
 import br.com.jarvis.service.auth.UserService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-open class UserComicBookInteractionServiceImpl(
-    private val repository: UseComicBookInteractionRepository,
+open class FavoriteComicBookServiceImpl(
+    private val repository: FavoriteComicBookRepository,
     private val comicBookRepository: ComicBookRepository,
     private val userService: UserService
-) : UserComicBookInteractionService {
+) : FavoriteComicBookService {
 
     @Transactional
     override fun favorite(comicBookId: Long) {
@@ -23,10 +23,10 @@ open class UserComicBookInteractionServiceImpl(
 
         comicBookRepository.findById(comicBookId).map { comicBook ->
             if (repository.isDuplicate(comicBookId, user.id)) {
-                throw UserComicBookInteractionDuplicatedException
+                throw FavoriteDuplicatedException
             } else {
                 repository.save(
-                    UserComicBookInteractionEntity(
+                    FavoriteComicBookEntity(
                         comicBookEntity = comicBook,
                         isFavorite = true,
                         userEntity = user
@@ -46,13 +46,8 @@ open class UserComicBookInteractionServiceImpl(
             val entity = repository.findByComicBookIdAndUserId(comicBookId = comicBookId, userId = userId)
             repository.delete(entity)
         } else {
-            throw UserComicBookInteractionNotFoundException
+            throw FavoriteNotFoundException
         }
-    }
-
-    @Transactional
-    override fun review(comicBookId: Long, review: Double, userId: Long) {
-        TODO("Not yet implemented")
     }
 
     @Transactional

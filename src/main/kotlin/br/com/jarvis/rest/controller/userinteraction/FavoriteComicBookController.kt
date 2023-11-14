@@ -1,7 +1,7 @@
 package br.com.jarvis.rest.controller.userinteraction
 
 import br.com.jarvis.rest.controller.dto.MessageDTO
-import br.com.jarvis.service.userinteraction.UserComicBookInteractionService
+import br.com.jarvis.service.userinteraction.FavoriteComicBookService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/favorites")
-class UserComicBookInteractionController(
-    private val service: UserComicBookInteractionService,
+@RequestMapping("/api/favorite")
+class FavoriteComicBookController(
+    private val service: FavoriteComicBookService,
 ) {
 
-    @PostMapping("comicbook/{comicBookId}")
+    @PostMapping("{comicBookId}/comicbook")
     fun saveComicBookFavorite(
         @PathVariable comicBookId: Long,
     ): ResponseEntity<*> {
@@ -24,7 +24,7 @@ class UserComicBookInteractionController(
         return ResponseEntity.status(HttpStatus.CREATED).body(MessageDTO("Item favorited successfully"))
     }
 
-    @DeleteMapping("comicbook/{comicBookId}")
+    @DeleteMapping("{comicBookId}/comicbook")
     fun removeComicBookFavorite(
         @PathVariable comicBookId: Long,
     ): ResponseEntity<Unit> {

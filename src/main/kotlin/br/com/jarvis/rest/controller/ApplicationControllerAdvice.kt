@@ -5,8 +5,10 @@ import br.com.jarvis.exception.BusinessRuleException
 import br.com.jarvis.exception.ComicBookException
 import br.com.jarvis.exception.ComicBookExistsException
 import br.com.jarvis.exception.ComicBookNotFoundException
-import br.com.jarvis.exception.UserComicBookInteractionDuplicatedException
-import br.com.jarvis.exception.UserComicBookInteractionNotFoundException
+import br.com.jarvis.exception.FavoriteDuplicatedException
+import br.com.jarvis.exception.FavoriteNotFoundException
+import br.com.jarvis.exception.ReviewDuplicatedException
+import br.com.jarvis.exception.ReviewUpdateException
 import br.com.jarvis.exception.UserRuleException
 import br.com.jarvis.exception.VolumeNotFoundException
 import br.com.jarvis.rest.ApiErrors
@@ -65,14 +67,26 @@ class ApplicationControllerAdvice {
         return ApiErrors(exception.message.orEmpty())
     }
 
-    @ExceptionHandler(UserComicBookInteractionDuplicatedException::class)
+    @ExceptionHandler(FavoriteDuplicatedException::class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    fun handleUserComicBookInteractionDuplicatedException(exception: UserComicBookInteractionDuplicatedException): ApiErrors {
+    fun handleUserComicBookInteractionDuplicatedException(exception: FavoriteDuplicatedException): ApiErrors {
         return ApiErrors(exception.message.orEmpty())
     }
-    @ExceptionHandler(UserComicBookInteractionNotFoundException::class)
+    @ExceptionHandler(FavoriteNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleUserComicBookInteractionNotFoundException(exception: UserComicBookInteractionNotFoundException): ApiErrors {
+    fun handleUserComicBookInteractionNotFoundException(exception: FavoriteNotFoundException): ApiErrors {
+        return ApiErrors(exception.message.orEmpty())
+    }
+
+    @ExceptionHandler(ReviewDuplicatedException::class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    fun handleReviewDuplicatedException(exception: ReviewDuplicatedException): ApiErrors {
+        return ApiErrors(exception.message.orEmpty())
+    }
+
+    @ExceptionHandler(ReviewUpdateException::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun handleReviewUpdateException(exception: ReviewUpdateException): ApiErrors {
         return ApiErrors(exception.message.orEmpty())
     }
 
