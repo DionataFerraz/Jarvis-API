@@ -5,6 +5,7 @@ import br.com.jarvis.domain.repository.ComicBookRepository
 import br.com.jarvis.domain.repository.FavoriteComicBookRepository
 import br.com.jarvis.exception.ComicBookNotFoundException
 import br.com.jarvis.exception.FavoriteDuplicatedException
+import br.com.jarvis.exception.FavoriteErrorException
 import br.com.jarvis.exception.FavoriteNotFoundException
 import br.com.jarvis.service.auth.UserService
 import org.springframework.stereotype.Service
@@ -40,23 +41,17 @@ open class FavoriteComicBookServiceImpl(
 
     @Transactional
     override fun unFavorite(comicBookId: Long) {
-        val userId = userService.retrieveUser().id
+        try {
+            val userId = userService.retrieveUser().id
 
-        if (repository.isDuplicate(comicBookId, userId)) {
-            val entity = repository.findByComicBookIdAndUserId(comicBookId = comicBookId, userId = userId)
-            repository.delete(entity)
-        } else {
-            throw FavoriteNotFoundException
+            if (repository.isDuplicate(comicBookId, userId)) {
+                val entity = repository.findByComicBookIdAndUserId(comicBookId = comicBookId, userId = userId)
+                repository.delete(entity)
+            } else {
+                throw FavoriteNotFoundException
+            }
+        } catch (exception: Exception) {
+            throw FavoriteErrorException(exception.message.orEmpty())
         }
-    }
-
-    @Transactional
-    override fun readAll(comicBookId: Long, isReadAll: Boolean, userId: Long) {
-        TODO("Not yet implemented")
-    }
-
-    @Transactional
-    override fun hasAllVolume(comicBookId: Long, isReadAll: Boolean, userId: Long) {
-        TODO("Not yet implemented")
     }
 }

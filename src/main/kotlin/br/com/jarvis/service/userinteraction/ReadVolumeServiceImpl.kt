@@ -51,7 +51,7 @@ open class ReadVolumeServiceImpl(
                 throw ReadVolumeNotFoundException
             }
         } catch (exception: Exception) {
-            throw ReadVolumeErrorException
+            throw ReadVolumeErrorException(exception.message.orEmpty())
         }
     }
 }

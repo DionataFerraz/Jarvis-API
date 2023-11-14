@@ -4,4 +4,4 @@ object ReadVolumeDuplicatedException : RuntimeException("Duplicate action to sav
 object ReadVolumeNotFoundException : RuntimeException(
     "You cannot delete volume is read because it is exist"
 )
-object ReadVolumeErrorException : RuntimeException("Error to remove read")
+data class ReadVolumeErrorException(override val message: String) : RuntimeException("Error to remove read: $message")

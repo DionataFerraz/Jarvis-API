@@ -53,7 +53,7 @@ open class ReviewComicBookServiceImpl(
                 )
             )
         } catch (exception: Exception) {
-            throw ReviewUpdateException
+            throw ReviewUpdateException(exception.message.orEmpty())
         }
     }
 }

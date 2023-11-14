@@ -1,4 +1,4 @@
 package br.com.jarvis.exception
 
 object ReviewDuplicatedException : RuntimeException("Duplicate action")
-object ReviewUpdateException : RuntimeException("Error to update review")
+data class ReviewUpdateException(override val message: String) : RuntimeException("Error to update review: $message")
