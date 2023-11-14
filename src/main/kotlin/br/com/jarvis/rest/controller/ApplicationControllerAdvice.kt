@@ -7,6 +7,9 @@ import br.com.jarvis.exception.ComicBookExistsException
 import br.com.jarvis.exception.ComicBookNotFoundException
 import br.com.jarvis.exception.FavoriteDuplicatedException
 import br.com.jarvis.exception.FavoriteNotFoundException
+import br.com.jarvis.exception.ReadVolumeDuplicatedException
+import br.com.jarvis.exception.ReadVolumeErrorException
+import br.com.jarvis.exception.ReadVolumeNotFoundException
 import br.com.jarvis.exception.ReviewDuplicatedException
 import br.com.jarvis.exception.ReviewUpdateException
 import br.com.jarvis.exception.UserRuleException
@@ -87,6 +90,24 @@ class ApplicationControllerAdvice {
     @ExceptionHandler(ReviewUpdateException::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun handleReviewUpdateException(exception: ReviewUpdateException): ApiErrors {
+        return ApiErrors(exception.message.orEmpty())
+    }
+
+    @ExceptionHandler(ReadVolumeDuplicatedException::class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    fun handleReadVolumeDuplicatedException(exception: ReadVolumeDuplicatedException): ApiErrors {
+        return ApiErrors(exception.message.orEmpty())
+    }
+
+    @ExceptionHandler(ReadVolumeNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleReadVolumeNotFoundException(exception: ReadVolumeNotFoundException): ApiErrors {
+        return ApiErrors(exception.message.orEmpty())
+    }
+
+    @ExceptionHandler(ReadVolumeErrorException::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun handleReadVolumeErrorException(exception: ReadVolumeErrorException): ApiErrors {
         return ApiErrors(exception.message.orEmpty())
     }
 
