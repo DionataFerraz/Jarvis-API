@@ -55,88 +55,93 @@ open class ComicBookServiceImpl(
             val newComicBookLocale = mapper.mapFrom(dto, comicBook)
             comicBookLocaleRepository.save(newComicBookLocale)
         } else {
-            val newComicBook = ComicBookEntity(
-                comicType = ComicType.valueOf(dto.comicType),
-                imagePath = dto.imagePath,
-                hasAnimation = dto.hasAnimation,
-                releaseDate = dto.releaseDate,
-                completionDate = dto.completionDate,
-                tags = tagRepository.findAllById(dto.tags.asIterable()).toSet()
-            )
-            repository.save(newComicBook)
-
-            val newComicBookLocale = mapper.mapFrom(dto, newComicBook)
-            comicBookLocaleRepository.save(newComicBookLocale)
-
-            val authors = dto.authors?.map { author ->
-                AuthorEntity(
-                    name = author.name,
-                    birthday = author.birthday,
-                    synopsis = author.synopsis,
-                    imagePath = author.imagePath,
-                    comicBook = newComicBook,
+            try {
+                val newComicBook = ComicBookEntity(
+                    comicType = ComicType.valueOf(dto.comicType),
+                    imagePath = dto.imagePath,
+                    hasAnimation = dto.hasAnimation,
+                    releaseDate = dto.releaseDate,
+                    completionDate = dto.completionDate,
+                    tags = tagRepository.findAllById(dto.tags.asIterable()).toSet()
                 )
-            }
+                repository.save(newComicBook)
 
-            val animations = dto.animations?.map { animation ->
-                AnimationEntity(
-                    name = animation.name,
-                    releaseDate = animation.releaseDate,
-                    completionDate = animation.completionDate,
-                    episodeQtd = animation.episodeQtd,
-                    seasonQtd = animation.seasonQtd,
-                    imagePath = animation.imagePath,
-                    comicBook = newComicBook,
-                )
-            }
+                val newComicBookLocale = mapper.mapFrom(dto, newComicBook)
+                comicBookLocaleRepository.save(newComicBookLocale)
 
-            val listVolume = dto.volumes?.map { volumeDTO ->
-                val newVolume = VolumeEntity(
-                    releaseYear = volumeDTO.releaseYear,
-                    number = volumeDTO.number,
-                    description = volumeDTO.description,
-                    isbn = volumeDTO.isbn,
-                    pages = volumeDTO.pages,
-                    bookCoverType = BookCoverType.valueOf(volumeDTO.bookCoverType),
-                    locale = newComicBookLocale,
-                )
+                val authors = dto.authors?.map { author ->
+                    AuthorEntity(
+                        name = author.name,
+                        birthday = author.birthday,
+                        synopsis = author.synopsis,
+                        imagePath = author.imagePath,
+                        comicBook = newComicBook,
+                    )
+                }
 
-                imageRepository.saveAll(
-                    volumeDTO.images?.map {
-                        ImageEntity(
-                            imagePath = it.image,
-                            description = it.description,
-                            volume = newVolume
-                        )
-                    } ?: listOf(
-                        if (dto.imageType == null) {
-                            throw ComicBookNeedsImageTypeException
-                        } else {
+                val animations = dto.animations?.map { animation ->
+                    AnimationEntity(
+                        name = animation.name,
+                        releaseDate = animation.releaseDate,
+                        completionDate = animation.completionDate,
+                        episodeQtd = animation.episodeQtd,
+                        seasonQtd = animation.seasonQtd,
+                        imagePath = animation.imagePath,
+                        comicBook = newComicBook,
+                    )
+                }
+
+                val listVolume = dto.volumes?.map { volumeDTO ->
+                    val newVolume = VolumeEntity(
+                        releaseYear = volumeDTO.releaseYear,
+                        number = volumeDTO.number,
+                        description = volumeDTO.description,
+                        isbn = volumeDTO.isbn,
+                        pages = volumeDTO.pages,
+                        bookCoverType = BookCoverType.valueOf(volumeDTO.bookCoverType),
+                        locale = newComicBookLocale,
+                    )
+
+                    imageRepository.saveAll(
+                        volumeDTO.images?.map {
                             ImageEntity(
-                                imagePath = dto.name
-                                    .lowercase()
-                                    .replace(" ", "")
-                                    .plus("_${volumeDTO.number}")
-                                    .plus(dto.imageType),
+                                imagePath = it.image,
+                                description = it.description,
                                 volume = newVolume
                             )
-                        }
+                        } ?: listOf(
+                            if (dto.imageType == null) {
+                                throw ComicBookNeedsImageTypeException
+                            } else {
+                                ImageEntity(
+                                    imagePath = dto.name
+                                        .lowercase()
+                                        .replace(" ", "")
+                                        .plus("_${volumeDTO.number}")
+                                        .plus(dto.imageType),
+                                    volume = newVolume
+                                )
+                            }
+                        )
                     )
-                )
 
-                newVolume
-            }
+                    newVolume
+                }
 
-            if (listVolume != null) {
-                volumeRepository.saveAll(listVolume)
-            }
+                if (listVolume != null) {
+                    volumeRepository.saveAll(listVolume)
+                }
 
-            if (authors != null) {
-                authorRepository.saveAll(authors)
-            }
+                if (authors != null) {
+                    authorRepository.saveAll(authors)
+                }
 
-            if (animations != null) {
-                animationRepository.saveAll(animations)
+                if (animations != null) {
+                    animationRepository.saveAll(animations)
+                }
+
+            } catch (exception: Exception) {
+                throw ComicBookException(exception.message.orEmpty())
             }
         }
     }
