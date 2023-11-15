@@ -24,6 +24,7 @@ import br.com.jarvis.rest.controller.dto.response.AnimationResponseDTO
 import br.com.jarvis.rest.controller.dto.response.AuthorResponseDTO
 import br.com.jarvis.rest.controller.dto.response.ComicBookResponseDTO
 import br.com.jarvis.rest.controller.dto.response.ImageResponseDTO
+import br.com.jarvis.rest.controller.dto.response.TagsResponseDTO
 import br.com.jarvis.rest.controller.dto.response.VolumeResponseDTO
 import br.com.jarvis.service.ComicBookService
 import org.springframework.stereotype.Service
@@ -60,6 +61,7 @@ open class ComicBookServiceImpl(
                 hasAnimation = dto.hasAnimation,
                 releaseDate = dto.releaseDate,
                 completionDate = dto.completionDate,
+                tags = tagRepository.findAllById(dto.tags.asIterable()).toSet()
             )
             repository.save(newComicBook)
 
@@ -225,6 +227,12 @@ open class ComicBookServiceImpl(
                             }
                         )
                     },
+                tags = comicBook.tags.map { tagEntity ->
+                    TagsResponseDTO(
+                        id = tagEntity.id,
+                        name = tagEntity.name,
+                    )
+                }
             )
         }.orElseThrow {
             ComicBookNotFoundException
