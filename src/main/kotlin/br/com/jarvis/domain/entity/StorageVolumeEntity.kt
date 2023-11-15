@@ -13,15 +13,15 @@ import jakarta.persistence.Table
 import jakarta.validation.constraints.NotNull
 
 @Entity
-@Table(name = "read_volume")
-class ReadVolumeEntity(
+@Table(name = "storage_volume")
+class StorageVolumeEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
     var id: Long? = null,
     @Column(nullable = false)
     @NotNull(message = "IsRead field is required.")
-    val isRead: Boolean = false,
+    val hasVolume : Boolean = false,
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_volume", referencedColumnName = "id")
