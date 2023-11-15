@@ -15,6 +15,9 @@ import br.com.jarvis.exception.ReviewUpdateException
 import br.com.jarvis.exception.StorageVolumeDuplicatedException
 import br.com.jarvis.exception.StorageVolumeErrorException
 import br.com.jarvis.exception.StorageVolumeNotFoundException
+import br.com.jarvis.exception.TagDuplicatedException
+import br.com.jarvis.exception.TagErrorException
+import br.com.jarvis.exception.TagNotFoundException
 import br.com.jarvis.exception.UserRuleException
 import br.com.jarvis.exception.VolumeNotFoundException
 import br.com.jarvis.rest.ApiErrors
@@ -129,6 +132,24 @@ class ApplicationControllerAdvice {
     @ExceptionHandler(StorageVolumeErrorException::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun handleStorageVolumeErrorException(exception: StorageVolumeErrorException): ApiErrors {
+        return ApiErrors(exception.message.orEmpty())
+    }
+
+    @ExceptionHandler(TagDuplicatedException::class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    fun handleTagDuplicatedException(exception: TagDuplicatedException): ApiErrors {
+        return ApiErrors(exception.message.orEmpty())
+    }
+
+    @ExceptionHandler(TagNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleTagNotFoundException(exception: TagNotFoundException): ApiErrors {
+        return ApiErrors(exception.message.orEmpty())
+    }
+
+    @ExceptionHandler(TagErrorException::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun handleTagErrorException(exception: TagErrorException): ApiErrors {
         return ApiErrors(exception.message.orEmpty())
     }
 

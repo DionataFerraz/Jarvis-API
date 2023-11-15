@@ -10,6 +10,9 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.JoinTable
+import jakarta.persistence.ManyToMany
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotEmpty
@@ -61,6 +64,14 @@ class ComicBookEntity {
     )
     var images: Set<ImageEntity> = emptySet()
 
+    @ManyToMany(cascade = [CascadeType.ALL])
+    @JoinTable(
+        name = "comic_book_tag",
+        joinColumns = [JoinColumn(name = "comic_book_id")],
+        inverseJoinColumns = [JoinColumn(name = "tag_id")]
+    )
+    var tags: Set<TagEntity> = emptySet()
+
     @Column(name = "comic_type", nullable = false)
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Comic type field is required.")
@@ -90,7 +101,8 @@ class ComicBookEntity {
         hasAnimation: Boolean,
         locales: Set<ComicBookLocale> = emptySet(),
         releaseDate: LocalDate,
-        completionDate: LocalDate? = null
+        completionDate: LocalDate? = null,
+        tags: Set<TagEntity> = emptySet(),
     ) {
         this.comicType = comicType
         this.imagePath = imagePath
@@ -98,6 +110,7 @@ class ComicBookEntity {
         this.locales = locales
         this.releaseDate = releaseDate
         this.completionDate = completionDate
+        this.tags = tags
     }
 
     override fun toString(): String {
@@ -109,6 +122,7 @@ class ComicBookEntity {
                 "   releaseDate = $releaseDate," +
                 "   completionDate = $completionDate," +
                 "   locales = $locales," +
+                "   tags = $tags," +
                 ")"
     }
 }

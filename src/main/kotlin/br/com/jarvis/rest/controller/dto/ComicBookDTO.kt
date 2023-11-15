@@ -1,6 +1,5 @@
 package br.com.jarvis.rest.controller.dto
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDate
 
