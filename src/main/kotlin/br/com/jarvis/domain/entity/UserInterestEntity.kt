@@ -24,9 +24,9 @@ class UserInterestEntity(
     @NotEmpty(message = "User interest date field is required.")
     val date: Date,
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "id_comic_book", referencedColumnName = "id")
-    var comicBookEntity: ComicBookEntity? = null,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_user", referencedColumnName = "id")
+    var userEntity: UserEntity? = null,
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tag", referencedColumnName = "id")
