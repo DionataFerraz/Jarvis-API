@@ -12,6 +12,9 @@ import br.com.jarvis.exception.ReadVolumeErrorException
 import br.com.jarvis.exception.ReadVolumeNotFoundException
 import br.com.jarvis.exception.ReviewDuplicatedException
 import br.com.jarvis.exception.ReviewUpdateException
+import br.com.jarvis.exception.StorageVolumeDuplicatedException
+import br.com.jarvis.exception.StorageVolumeErrorException
+import br.com.jarvis.exception.StorageVolumeNotFoundException
 import br.com.jarvis.exception.UserRuleException
 import br.com.jarvis.exception.VolumeNotFoundException
 import br.com.jarvis.rest.ApiErrors
@@ -108,6 +111,24 @@ class ApplicationControllerAdvice {
     @ExceptionHandler(ReadVolumeErrorException::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun handleReadVolumeErrorException(exception: ReadVolumeErrorException): ApiErrors {
+        return ApiErrors(exception.message.orEmpty())
+    }
+
+    @ExceptionHandler(StorageVolumeDuplicatedException::class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    fun handleStorageVolumeDuplicatedException(exception: StorageVolumeDuplicatedException): ApiErrors {
+        return ApiErrors(exception.message.orEmpty())
+    }
+
+    @ExceptionHandler(StorageVolumeNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleStorageVolumeNotFoundException(exception: StorageVolumeNotFoundException): ApiErrors {
+        return ApiErrors(exception.message.orEmpty())
+    }
+
+    @ExceptionHandler(StorageVolumeErrorException::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun handleStorageVolumeErrorException(exception: StorageVolumeErrorException): ApiErrors {
         return ApiErrors(exception.message.orEmpty())
     }
 
