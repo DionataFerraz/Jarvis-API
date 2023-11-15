@@ -1,6 +1,7 @@
 package br.com.jarvis.rest.controller
 
-import br.com.jarvis.rest.controller.dto.VolumeDTO
+import br.com.jarvis.rest.controller.dto.request.VolumeRequestDTO
+import br.com.jarvis.rest.controller.dto.response.VolumeResponseDTO
 import br.com.jarvis.service.VolumeService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,7 +19,7 @@ class VolumeController(private val service: VolumeService) {
     @PostMapping("{id}")
     fun saveComicsById(
         @PathVariable id: Long,
-        @RequestBody dto: @Valid List<VolumeDTO>
+        @RequestBody dto: @Valid List<VolumeRequestDTO>
     ) {
         service.saveById(id = id, volumes = dto)
     }
@@ -27,7 +28,7 @@ class VolumeController(private val service: VolumeService) {
     fun fetchVolume(
         @PathVariable id: Long,
         @RequestHeader("Accept-Language") language: String
-    ): VolumeDTO {
+    ): VolumeResponseDTO {
         return service.fetchVolume(id = id, language = language)
     }
 
@@ -35,7 +36,7 @@ class VolumeController(private val service: VolumeService) {
     fun fetchAllVolumesByLanguage(
         @PathVariable id: Long,
         @RequestHeader("Accept-Language") language: String
-    ): List<VolumeDTO> {
+    ): List<VolumeResponseDTO> {
         return service.fetchAllVolumes(id = id, language = language)
     }
 

@@ -13,16 +13,18 @@ import br.com.jarvis.domain.repository.AuthorRepository
 import br.com.jarvis.domain.repository.ComicBookLocaleRepository
 import br.com.jarvis.domain.repository.ComicBookRepository
 import br.com.jarvis.domain.repository.ImageRepository
+import br.com.jarvis.domain.repository.TagRepository
 import br.com.jarvis.domain.repository.VolumeRepository
 import br.com.jarvis.exception.ComicBookException
 import br.com.jarvis.exception.ComicBookExistsException
 import br.com.jarvis.exception.ComicBookNeedsImageTypeException
 import br.com.jarvis.exception.ComicBookNotFoundException
-import br.com.jarvis.rest.controller.dto.AnimationDTO
-import br.com.jarvis.rest.controller.dto.AuthorDTO
-import br.com.jarvis.rest.controller.dto.ComicBookDTO
-import br.com.jarvis.rest.controller.dto.ImageDTO
-import br.com.jarvis.rest.controller.dto.VolumeDTO
+import br.com.jarvis.rest.controller.dto.request.ComicBookRequestDTO
+import br.com.jarvis.rest.controller.dto.response.AnimationResponseDTO
+import br.com.jarvis.rest.controller.dto.response.AuthorResponseDTO
+import br.com.jarvis.rest.controller.dto.response.ComicBookResponseDTO
+import br.com.jarvis.rest.controller.dto.response.ImageResponseDTO
+import br.com.jarvis.rest.controller.dto.response.VolumeResponseDTO
 import br.com.jarvis.service.ComicBookService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -35,11 +37,12 @@ open class ComicBookServiceImpl(
     private val imageRepository: ImageRepository,
     private val authorRepository: AuthorRepository,
     private val animationRepository: AnimationRepository,
+    private val tagRepository: TagRepository,
     private val mapper: ComicBookDTOToComicBookLocaleMapper
 ) : ComicBookService {
 
     @Transactional
-    override fun save(dto: ComicBookDTO) {
+    override fun save(dto: ComicBookRequestDTO) {
         val comicBookLocale = comicBookLocaleRepository.findByName(dto.name).firstOrNull()
         val comicBook = comicBookLocale?.comicBook
 
@@ -137,7 +140,7 @@ open class ComicBookServiceImpl(
     }
 
     @Transactional
-    override fun fetchAllComics(language: String): List<ComicBookDTO> {
+    override fun fetchAllComics(language: String): List<ComicBookResponseDTO> {
         try {
             val comicBooks = repository.findByLanguageComicBookLocaleIn(language)
             val locales = comicBookLocaleRepository.findByComicBookIn(comicBooks)
@@ -147,7 +150,7 @@ open class ComicBookServiceImpl(
                     it.comicBook == comicBook
                 }
 
-                ComicBookDTO(
+                ComicBookResponseDTO(
                     id = comicBook.id,
                     comicType = comicBook.comicType.name,
                     imagePath = comicBook.imagePath,
@@ -165,14 +168,14 @@ open class ComicBookServiceImpl(
     }
 
     @Transactional
-    override fun fetchComic(id: Long, language: String): ComicBookDTO {
+    override fun fetchComic(id: Long, language: String): ComicBookResponseDTO {
         return repository.findByIdComicBookLocaleIn(id, language).map { comicBook ->
             val locale = comicBook.locales.first {
                 it.language == language
             }
 
-            val authorDTO = comicBook.author.map { authorEntity ->
-                AuthorDTO(
+            val authorResponseDTO = comicBook.author.map { authorEntity ->
+                AuthorResponseDTO(
                     name = authorEntity.name,
                     synopsis = authorEntity.synopsis,
                     birthday = authorEntity.birthday,
@@ -180,8 +183,8 @@ open class ComicBookServiceImpl(
                 )
             }
 
-            val animationDTO = comicBook.animation.map { animationEntity ->
-                AnimationDTO(
+            val animationResponseDTO = comicBook.animation.map { animationEntity ->
+                AnimationResponseDTO(
                     name = animationEntity.name,
                     releaseDate = animationEntity.releaseDate,
                     completionDate = animationEntity.completionDate,
@@ -191,7 +194,7 @@ open class ComicBookServiceImpl(
                 )
             }
 
-            ComicBookDTO(
+            ComicBookResponseDTO(
                 id = comicBook.id,
                 comicType = comicBook.comicType.name,
                 imagePath = comicBook.imagePath,
@@ -201,12 +204,12 @@ open class ComicBookServiceImpl(
                 name = locale.name,
                 description = locale.description,
                 language = locale.language,
-                authors = authorDTO,
-                animations = animationDTO,
+                authors = authorResponseDTO,
+                animations = animationResponseDTO,
                 volumes = locale.volumes
                     .sortedBy { it.number }
                     .map { volumeEntity ->
-                        VolumeDTO(
+                        VolumeResponseDTO(
                             id = volumeEntity.id,
                             releaseYear = volumeEntity.releaseYear,
                             number = volumeEntity.number,
@@ -215,13 +218,13 @@ open class ComicBookServiceImpl(
                             pages = volumeEntity.pages,
                             bookCoverType = volumeEntity.bookCoverType.name,
                             images = volumeEntity.images.map { imageEntity ->
-                                ImageDTO(
+                                ImageResponseDTO(
                                     image = imageEntity.imagePath,
                                     description = imageEntity.description
                                 )
                             }
                         )
-                    }
+                    },
             )
         }.orElseThrow {
             ComicBookNotFoundException

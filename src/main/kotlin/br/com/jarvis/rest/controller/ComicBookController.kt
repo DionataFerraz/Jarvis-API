@@ -1,6 +1,7 @@
 package br.com.jarvis.rest.controller
 
-import br.com.jarvis.rest.controller.dto.ComicBookDTO
+import br.com.jarvis.rest.controller.dto.request.ComicBookRequestDTO
+import br.com.jarvis.rest.controller.dto.response.ComicBookResponseDTO
 import br.com.jarvis.service.ComicBookService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -19,14 +20,14 @@ class ComicBookController(private val service: ComicBookService) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun save(@RequestBody dto: @Valid ComicBookDTO) {
+    fun save(@RequestBody dto: @Valid ComicBookRequestDTO) {
         service.save(dto)
     }
 
     @GetMapping
     fun fetchComicsByLanguage(
         @RequestHeader("Accept-Language") language: String
-    ): List<ComicBookDTO> {
+    ): List<ComicBookResponseDTO> {
         return service.fetchAllComics(language = language)
     }
 
@@ -34,7 +35,7 @@ class ComicBookController(private val service: ComicBookService) {
     fun fetchComicByLanguage(
         @PathVariable id: Long,
         @RequestHeader("Accept-Language") language: String
-    ): ComicBookDTO {
+    ): ComicBookResponseDTO {
         return service.fetchComic(id = id, language = language)
     }
 

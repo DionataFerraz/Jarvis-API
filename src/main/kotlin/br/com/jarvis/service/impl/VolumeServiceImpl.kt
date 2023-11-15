@@ -7,8 +7,9 @@ import br.com.jarvis.domain.repository.ComicBookRepository
 import br.com.jarvis.domain.repository.VolumeRepository
 import br.com.jarvis.exception.ComicBookNotFoundException
 import br.com.jarvis.exception.VolumeNotFoundException
-import br.com.jarvis.rest.controller.dto.ImageDTO
-import br.com.jarvis.rest.controller.dto.VolumeDTO
+import br.com.jarvis.rest.controller.dto.request.VolumeRequestDTO
+import br.com.jarvis.rest.controller.dto.response.ImageResponseDTO
+import br.com.jarvis.rest.controller.dto.response.VolumeResponseDTO
 import br.com.jarvis.service.VolumeService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -21,7 +22,7 @@ open class VolumeServiceImpl(
 ) : VolumeService {
 
     @Transactional
-    override fun saveById(id: Long, volumes: List<VolumeDTO>?) {
+    override fun saveById(id: Long, volumes: List<VolumeRequestDTO>?) {
         comicBookLocaleRepository.findById(id).map { comicBookLocale ->
             volumes?.map { volumeDTO ->
                 VolumeEntity(
@@ -42,9 +43,9 @@ open class VolumeServiceImpl(
     }
 
     @Transactional
-    override fun fetchVolume(id: Long, language: String): VolumeDTO {
+    override fun fetchVolume(id: Long, language: String): VolumeResponseDTO {
         return repository.findById(id).map { volumeEntity ->
-            VolumeDTO(
+            VolumeResponseDTO(
                 id = volumeEntity.id,
                 releaseYear = volumeEntity.releaseYear,
                 number = volumeEntity.number,
@@ -53,7 +54,7 @@ open class VolumeServiceImpl(
                 pages = volumeEntity.pages,
                 bookCoverType = volumeEntity.bookCoverType.name,
                 images = volumeEntity.images.map { imageEntity ->
-                    ImageDTO(
+                    ImageResponseDTO(
                         image = imageEntity.imagePath,
                         description = imageEntity.description
                     )
@@ -65,7 +66,7 @@ open class VolumeServiceImpl(
     }
 
     @Transactional
-    override fun fetchAllVolumes(id: Long, language: String): List<VolumeDTO> {
+    override fun fetchAllVolumes(id: Long, language: String): List<VolumeResponseDTO> {
         return comicBookRepository.findByIdComicBookLocaleIn(id, language).map { comicBook ->
             val locale = comicBook.locales.first {
                 it.language == language
@@ -74,7 +75,7 @@ open class VolumeServiceImpl(
             locale.volumes
                 .sortedBy { it.number }
                 .map { volumeEntity ->
-                    VolumeDTO(
+                    VolumeResponseDTO(
                         id = volumeEntity.id,
                         releaseYear = volumeEntity.releaseYear,
                         number = volumeEntity.number,
@@ -83,7 +84,7 @@ open class VolumeServiceImpl(
                         pages = volumeEntity.pages,
                         bookCoverType = volumeEntity.bookCoverType.name,
                         images = volumeEntity.images.map { imageEntity ->
-                            ImageDTO(
+                            ImageResponseDTO(
                                 image = imageEntity.imagePath,
                                 description = imageEntity.description
                             )

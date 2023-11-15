@@ -1,10 +1,10 @@
 package br.com.jarvis.service
 
-import br.com.jarvis.rest.controller.dto.ComicBookDTO
-import br.com.jarvis.rest.controller.dto.VolumeDTO
+import br.com.jarvis.rest.controller.dto.request.VolumeRequestDTO
+import br.com.jarvis.rest.controller.dto.response.VolumeResponseDTO
 
 interface VolumeService {
-    fun saveById(id: Long, volumes: List<VolumeDTO>? = listOf())
-    fun fetchVolume(id: Long, language: String): VolumeDTO
-    fun fetchAllVolumes(id: Long, language: String): List<VolumeDTO>
+    fun saveById(id: Long, volumes: List<VolumeRequestDTO>? = listOf())
+    fun fetchVolume(id: Long, language: String): VolumeResponseDTO
+    fun fetchAllVolumes(id: Long, language: String): List<VolumeResponseDTO>
 }
