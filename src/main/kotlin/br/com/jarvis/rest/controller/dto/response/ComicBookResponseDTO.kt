@@ -1,5 +1,6 @@
 package br.com.jarvis.rest.controller.dto.response
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import java.time.LocalDate
 
 data class ComicBookResponseDTO(
@@ -8,15 +9,22 @@ data class ComicBookResponseDTO(
     val hasAnimation: Boolean,
     val name: String,
     val description: String,
-    val language: String,
+    val userRating: Double = 0.0,
+    val isNew: Boolean = false,
+    val isFavorite: Boolean = false,
     val releaseDate: LocalDate,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     val completionDate: LocalDate? = null,
     val imagePath: String,
-    val imageType: String? = null,
+    val coversImage: List<ImageResponseDTO>,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     val authors: List<AuthorResponseDTO>? = null,
-    val animations: List<AnimationResponseDTO>? = listOf(),
-    val volumes: List<VolumeResponseDTO>? = listOf(),
-    val tags: List<TagsResponseDTO> = listOf(),
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val animations: List<AnimationResponseDTO>? = null,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val volumes: List<VolumeResponseDTO>? = null,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val tags: List<TagsResponseDTO>? = null,
 )
 
 data class TagsResponseDTO(

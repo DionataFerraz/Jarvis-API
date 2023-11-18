@@ -62,7 +62,7 @@ class ComicBookEntity {
         targetEntity = ImageEntity::class,
         cascade = [CascadeType.ALL]
     )
-    var images: Set<ImageEntity> = emptySet()
+    var coversImage: Set<ImageEntity> = emptySet()
 
     @ManyToMany(cascade = [CascadeType.ALL])
     @JoinTable(
@@ -98,6 +98,7 @@ class ComicBookEntity {
     constructor(
         comicType: ComicType,
         imagePath: String,
+        coversImage: Set<ImageEntity> = emptySet(),
         hasAnimation: Boolean,
         locales: Set<ComicBookLocale> = emptySet(),
         releaseDate: LocalDate,
@@ -106,6 +107,7 @@ class ComicBookEntity {
     ) {
         this.comicType = comicType
         this.imagePath = imagePath
+        this.coversImage = coversImage
         this.hasAnimation = hasAnimation
         this.locales = locales
         this.releaseDate = releaseDate
@@ -118,6 +120,7 @@ class ComicBookEntity {
                 "   id = $id," +
                 "   comicType = $comicType," +
                 "   imagePath = $imagePath," +
+                "   coverImage = $coversImage," +
                 "   hasAnimation = $hasAnimation," +
                 "   releaseDate = $releaseDate," +
                 "   completionDate = $completionDate," +

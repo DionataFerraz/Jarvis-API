@@ -12,6 +12,7 @@ data class ComicBookRequestDTO(
     val releaseDate: LocalDate,
     val completionDate: LocalDate? = null,
     val imagePath: String,
+    val coversImage: List<ImageRequestDTO>,
     val imageType: String? = null,
     val authors: List<AuthorRequestDTO>? = null,
     val animations: List<AnimationRequestDTO>? = listOf(),

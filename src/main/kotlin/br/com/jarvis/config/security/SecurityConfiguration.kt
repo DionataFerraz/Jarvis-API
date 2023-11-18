@@ -31,6 +31,7 @@ class SecurityConfiguration(private val securityFilter: SecurityFilter) {
             it.requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
             it.requestMatchers(HttpMethod.GET, "/api/**").authenticated()
             it.requestMatchers(HttpMethod.POST, "/api/**").authenticated()
+            it.requestMatchers(HttpMethod.GET, "/v1/home").authenticated()
         }
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()

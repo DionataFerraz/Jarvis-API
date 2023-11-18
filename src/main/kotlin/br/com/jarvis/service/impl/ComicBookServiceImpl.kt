@@ -69,6 +69,17 @@ open class ComicBookServiceImpl(
                 val newComicBookLocale = mapper.mapFrom(dto, newComicBook)
                 comicBookLocaleRepository.save(newComicBookLocale)
 
+                val coversImage = dto.coversImage.map { image->
+                    ImageEntity(
+                        imagePath = image.image.lowercase()
+                            .replace(" ", "")
+                            .plus(dto.imageType),
+                        description = image.description,
+                        comicBook = newComicBook,
+                    )
+                }
+                imageRepository.saveAll(coversImage)
+
                 val authors = dto.authors?.map { author ->
                     AuthorEntity(
                         name = author.name,
@@ -156,17 +167,21 @@ open class ComicBookServiceImpl(
                 val locale = locales.first {
                     it.comicBook == comicBook
                 }
-
                 ComicBookResponseDTO(
                     id = comicBook.id,
                     comicType = comicBook.comicType.name,
                     imagePath = comicBook.imagePath,
+                    coversImage = comicBook.coversImage.map { imageEntity ->
+                        ImageResponseDTO(
+                            image = imageEntity.imagePath,
+                            description = imageEntity.description
+                        )
+                    },
                     hasAnimation = comicBook.hasAnimation,
                     releaseDate = comicBook.releaseDate,
                     completionDate = comicBook.completionDate,
                     name = locale.name,
                     description = locale.description,
-                    language = locale.language,
                 )
             }
         } catch (ex: Exception) {
@@ -205,12 +220,17 @@ open class ComicBookServiceImpl(
                 id = comicBook.id,
                 comicType = comicBook.comicType.name,
                 imagePath = comicBook.imagePath,
+                coversImage = comicBook.coversImage.map { imageEntity ->
+                    ImageResponseDTO(
+                        image = imageEntity.imagePath,
+                        description = imageEntity.description
+                    )
+                },
                 hasAnimation = comicBook.hasAnimation,
                 releaseDate = comicBook.releaseDate,
                 completionDate = comicBook.completionDate,
                 name = locale.name,
                 description = locale.description,
-                language = locale.language,
                 authors = authorResponseDTO,
                 animations = animationResponseDTO,
                 volumes = locale.volumes

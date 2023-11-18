@@ -15,7 +15,7 @@ interface FavoriteComicBookRepository : JpaRepository<FavoriteComicBookEntity, L
                 "AND id_comic_book = :comicBookId",
         nativeQuery = true
     )
-    fun isDuplicate(comicBookId: Long, userId: Long?): Boolean
+    fun isFavorite(comicBookId: Long?, userId: Long?): Boolean
 
     @Query(
         value = "SELECT " +

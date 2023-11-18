@@ -23,7 +23,7 @@ open class FavoriteComicBookServiceImpl(
         val user = userService.retrieveUser()
 
         comicBookRepository.findById(comicBookId).map { comicBook ->
-            if (repository.isDuplicate(comicBookId, user.id)) {
+            if (repository.isFavorite(comicBookId, user.id)) {
                 throw FavoriteDuplicatedException
             } else {
                 repository.save(
@@ -44,7 +44,7 @@ open class FavoriteComicBookServiceImpl(
         try {
             val userId = userService.retrieveUser().id
 
-            if (repository.isDuplicate(comicBookId, userId)) {
+            if (repository.isFavorite(comicBookId, userId)) {
                 val entity = repository.findByComicBookIdAndUserId(comicBookId = comicBookId, userId = userId)
                 repository.delete(entity)
             } else {

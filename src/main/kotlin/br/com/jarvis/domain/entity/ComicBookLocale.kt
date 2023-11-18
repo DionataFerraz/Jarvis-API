@@ -51,7 +51,7 @@ class ComicBookLocale {
     @NotEmpty(message = "Comic book locale name field is required.")
     lateinit var name: String
 
-    @Column(name = "description", length = 100, nullable = false)
+    @Column(name = "description", length = 2000, nullable = false)
     @NotEmpty(message = "Comic book locale description field is required.")
     lateinit var description: String
 

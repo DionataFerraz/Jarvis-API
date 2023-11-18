@@ -29,10 +29,13 @@ interface ReviewComicBookRepository : JpaRepository<ReviewComicBookEntity, Long>
 
     @Query(
         value = "SELECT " +
-                "AVG(review) AS average_review " +
-                "FROM review_comic_book",
+                "    COALESCE(AVG(review), 0) AS average_review " +
+                "FROM " +
+                "    JARVIS_DB.review_comic_book " +
+                "WHERE " +
+                "    id_comic_book = :comicBookId",
         nativeQuery = true
     )
-    fun findAverageReview(comicBookId: Long, userId: Long?): Double?
+    fun findAverageReview(comicBookId: Long?): Double
 
 }
