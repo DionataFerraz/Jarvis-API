@@ -52,31 +52,17 @@ open class FacebookLoginServiceImpl(
         }
 
         return findOrCreateFacebookUser(user)
-//        return authenticationService.authenticateFacebook(userEntity)
     }
 
 
     @Transactional
     private fun findOrCreateFacebookUser(user: User): UserEntity {
-        println("teste ========> findOrCreateFacebookUser $user")
-        val facebookIdUser: UserEntity? = userRepository.findByTokenFacebook(user.id)
-        val finalUser: UserEntity
-        if (facebookIdUser != null) {
-            println("teste ========> findOrCreateFacebookUser facebookIdUser != null")
-            finalUser = facebookIdUser
-        } else {
-            println("teste ========> findOrCreateFacebookUser else")
-            val emailUser: UserEntity? = userRepository.findByName(user.name)
-            println("teste ========> findOrCreateFacebookUser else emailUser $emailUser")
-            if (emailUser == null) {
-                finalUser = createFacebookUser(user)
-            } else {
-                finalUser = emailUser
-            }
-        }
+        val finalUser: UserEntity =
+            userRepository.findByTokenFacebook(user.id) ?: (userRepository.findByName(user.name) ?: createFacebookUser(
+                user
+            ))
 
         userRepository.save(finalUser)
-        println("teste ========> findOrCreateFacebookUser save $finalUser")
         return finalUser
     }
 
@@ -84,8 +70,8 @@ open class FacebookLoginServiceImpl(
         return UserEntity(
             name = user.name ?: "",
             tokenFacebook = user.id,
-            email = user.name, // caso eu mude para email ele não funciona, fica dando invalid login details no CustomAuthenticationProvider
-            pass = passwordEncoder.encode("N/A"),//user.id
+            email = user.email,
+            pass = passwordEncoder.encode("N/A"),
             birthday = null,//user.birthday,
             roleType = RoleType.APP,
         )

@@ -22,14 +22,18 @@ class SecurityFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        retrieveToken(request)?.let { token ->
-            val emailClaim: String = tokenService.validateToken(token)
-            val user = userRepository.findByEmail(emailClaim) ?: throw UserRuleException("User not found")
+        try {
+            retrieveToken(request)?.let { token ->
+                val emailClaim: String = tokenService.validateToken(token)
+                val user = userRepository.findByEmail(emailClaim) ?: throw UserRuleException("User not found")
 
-            val authentication = UsernamePasswordAuthenticationToken(user, null, user.authorities)
-            SecurityContextHolder.getContext().authentication = authentication
+                val authentication = UsernamePasswordAuthenticationToken(user, null, user.authorities)
+                SecurityContextHolder.getContext().authentication = authentication
+            }
+            filterChain.doFilter(request, response)
+        } catch (e: Exception) {
+            throw RuntimeException(e);
         }
-        filterChain.doFilter(request, response)
     }
 
     private fun retrieveToken(request: HttpServletRequest): String? {

@@ -64,6 +64,12 @@ class UserEntity(
     }
 
     override fun getAuthorities(): Collection<GrantedAuthority?> {
+        if (roleType == RoleType.ADMIN) {
+            return setOf(
+                SimpleGrantedAuthority(roleType.name),
+                SimpleGrantedAuthority(RoleType.APP.name)
+            )
+        }
         return setOf(SimpleGrantedAuthority(roleType.name))
     }
 

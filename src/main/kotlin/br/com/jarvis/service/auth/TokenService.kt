@@ -27,7 +27,7 @@ class TokenService(@Value("\${api.security.token.secret}") private val secret: S
                     .withClaim("role", user.roleType.name)
                     .withClaim("email", user.email)
                     .withExpiresAt(generateOneHourExpirationUTC())
-                    .sign(this.algorithm)
+                    .sign(algorithm)
             )
         } catch (exception: JWTCreationException) {
             throw RuntimeException("Error while generating token", exception)
@@ -36,7 +36,7 @@ class TokenService(@Value("\${api.security.token.secret}") private val secret: S
 
     fun validateToken(token: String): String {
         return try {
-            JWT.require(this.algorithm)
+            JWT.require(algorithm)
                 .withIssuer("auth-api")
                 .build()
                 .verify(token)

@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authorization.AuthorityAuthorizationManager
+import org.springframework.security.authorization.AuthorizationManagers
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.builders.WebSecurity
@@ -25,13 +27,13 @@ class SecurityConfiguration(private val securityFilter: SecurityFilter) {
             it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         }.authorizeHttpRequests {
             it.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-            it.requestMatchers(HttpMethod.POST, "/auth/facebook").permitAll()
-            it.requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-            it.requestMatchers(HttpMethod.PUT, "/api/**").authenticated()
-            it.requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
-            it.requestMatchers(HttpMethod.GET, "/api/**").authenticated()
-            it.requestMatchers(HttpMethod.POST, "/api/**").authenticated()
-            it.requestMatchers(HttpMethod.GET, "/v1/home").authenticated()
+                .requestMatchers(HttpMethod.POST, "/auth/facebook").permitAll()
+                .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/api/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/v1/home").hasAnyAuthority("ADMIN", "APP").anyRequest().authenticated()
         }
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
